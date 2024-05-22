@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homePage">
+
+    <activity
+        android:id="@+id/spalchScreenView"
+        android:name="com.example.amazon.SpalchScreenView"
+        android:label="activity_spalch_screen_view"
+        tools:layout="@layout/activity_spalch_screen_view" />
+    <activity
+        android:id="@+id/loginPageScreen"
+        android:name="com.example.amazon.LoginScreen.LoginPageScreen"
+        android:label="activity_login_page_screen"
+        tools:layout="@layout/activity_login_page_screen" />
+    <activity
+        android:id="@+id/registerPageScreen"
+        android:name="com.example.amazon.LoginScreen.RegisterPageScreen"
+        android:label="activity_register_page_screen"
+        tools:layout="@layout/activity_register_page_screen" />
+    <fragment
+        android:id="@+id/homePage"
+        android:name="com.example.amazon.HomeScreen.HomePage"
+        android:label="Home Page"
+        tools:layout="@layout/fragment_home_page" >
+        <action
+            android:id="@+id/action_homePage_to_buyPage3"
+            app:destination="@id/buyPage" />
+        <action
+            android:id="@+id/action_homePage_to_menuPage"
+            app:destination="@id/menuPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/buyPage"
+        android:name="com.example.amazon.HomeScreen.BuyPage"
+        android:label="Buy Page"
+        tools:layout="@layout/fragment_buy_page" >
+        <action
+            android:id="@+id/action_buyPage_to_homePage3"
+            app:destination="@id/homePage" />
+        <action
+            android:id="@+id/action_buyPage_to_menuPage"
+            app:destination="@id/menuPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/menuPage"
+        android:name="com.example.amazon.HomeScreen.MenuPage"
+        android:label="Menu Page"
+        tools:layout="@layout/fragment_menu_page" >
+        <action
+            android:id="@+id/action_menuPage_to_homePage"
+            app:destination="@id/homePage" />
+        <action
+            android:id="@+id/action_menuPage_to_buyPage"
+            app:destination="@id/buyPage" />
+    </fragment>
+
+</navigation>
