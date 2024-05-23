@@ -21,7 +21,6 @@ class LoginPageScreen : AppCompatActivity() {
         binding.signIn.setOnClickListener {
             val email = binding.emailLogin.text.toString()
             val pass = binding.passwordLogin.text.toString()
-
             if (email.isNotEmpty() && pass.isNotEmpty()) {
                 firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
                     if (it.isSuccessful) {
