@@ -21,6 +21,7 @@ class LoginPageScreen : AppCompatActivity() {
         binding.signIn.setOnClickListener {
             val email = binding.emailLogin.text.toString()
             val pass = binding.passwordLogin.text.toString()
+
             if (email.isNotEmpty() && pass.isNotEmpty()) {
                 firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
                     if (it.isSuccessful) {
@@ -31,7 +32,7 @@ class LoginPageScreen : AppCompatActivity() {
                     }
                 }
             } else {
-                Toast.makeText(this, "Empty Fields Are not Allowed !!", Toast.LENGTH_SHORT).show()
+                Toast.makeText( this, "Empty Fields Are not Allowed !!", Toast.LENGTH_SHORT).show()
 
             }
         }
