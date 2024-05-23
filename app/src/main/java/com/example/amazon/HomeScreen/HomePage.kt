@@ -41,6 +41,7 @@ class HomePage : Fragment()
         itemlist.add(CategoryItem("Lcd"))
         itemlist.add(CategoryItem("AirBods"))
         itemlist.add(CategoryItem("Computers"))
+
         binding.recyclerCategory.layoutManager= StaggeredGridLayoutManager(1, RecyclerView.HORIZONTAL)
         binding.recyclerCategory.adapter=CategoryAdapter(itemlist)
 
