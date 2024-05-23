@@ -7,16 +7,19 @@ import android.widget.Toast
 import com.example.amazon.R
 import com.example.amazon.databinding.ActivityRegisterPageScreenBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterPageScreen : AppCompatActivity() {
     lateinit var binding: ActivityRegisterPageScreenBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterPageScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firebaseAuth = FirebaseAuth.getInstance()
-
+        db = FirebaseFirestore.getInstance()
         binding.cancel.setOnClickListener {
             val intent = Intent(this, LoginPageScreen::class.java)
             startActivity(intent)
@@ -33,6 +36,13 @@ class RegisterPageScreen : AppCompatActivity() {
                 if (pass == confirmPass) {
                     firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
                         if (it.isSuccessful) {
+                            val userId = FirebaseAuth.getInstance().currentUser!!.uid
+                            val userRef = db.collection("users").document(userId)
+                            userRef.set(mapOf(
+                                "Email" to binding.emailRegister.text.toString(),
+                                "User Name" to binding.userRegister.text.toString(),
+                                "Phone" to binding.phoneRegister.text.toString()))
+
                             val intent = Intent(this, LoginPageScreen::class.java)
                             startActivity(intent)
                         } else {
