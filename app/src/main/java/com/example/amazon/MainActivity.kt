@@ -2,7 +2,6 @@ package com.example.amazon
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
@@ -12,7 +11,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.amazon.HomeScreen.MenuPage
 import com.example.amazon.HomeScreen.ProfileFragment
 import com.example.amazon.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -38,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         drawerLayout=binding.drawerLayout
         showDrawer()
-        binding.bottomnavigation.menu.getItem(3).setOnMenuItemClickListener {
+        binding.bottomnavigation.menu.getItem(2).setOnMenuItemClickListener {
             Toast.makeText(this@MainActivity, "Coming Soon", Toast.LENGTH_SHORT).show()
             drawerLayout.openDrawer(binding.navView)
             true}
