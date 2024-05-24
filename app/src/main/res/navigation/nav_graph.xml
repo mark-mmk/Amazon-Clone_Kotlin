@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_homePage_to_profileFragment2"
             app:destination="@id/profileFragment2" />
+        <action
+            android:id="@+id/action_homePage_to_allProductsFragment"
+            app:destination="@id/allProductsFragment" />
     </fragment>
     <fragment
         android:id="@+id/buyPage"
@@ -54,6 +57,16 @@
             app:destination="@id/homePage" />
     </fragment>
     <fragment
+        android:id="@+id/allProductsFragment"
+        android:name="com.example.amazon.HomeScreen.AllProductsFragment"
+        android:label="Products"
+        tools:layout="@layout/fragment_all_products" >
+        <argument
+            app:argType="string"
+            android:name="category_name"
+          />
+  </fragment>
+ <fragment
         android:id="@+id/paymentPage"
         android:name="com.example.amazon.HomeScreen.PaymentPage"
         android:label="Payment Page"
