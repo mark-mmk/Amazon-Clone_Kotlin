@@ -9,8 +9,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_Items"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_360sdp"
+        android:layout_width="401dp"
+        android:layout_height="308dp"
         android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -113,7 +113,7 @@
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/Buy"
+            android:id="@+id/checkout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Checkout"

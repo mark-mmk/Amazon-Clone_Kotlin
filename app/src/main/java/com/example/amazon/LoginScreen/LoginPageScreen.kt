@@ -76,12 +76,11 @@ class LoginPageScreen : AppCompatActivity() {
         binding.emailLogin.setText(Name)
         binding.passwordLogin.setText(Password)
     }
-//    override fun onStart() {
-//        super.onStart()
-//
-//        if (firebaseAuth.currentUser != null) {
-//            val intent = Intent(this, MainActivity::class.java)
-//            startActivity(intent)
-//        }
-//    }
+    override fun onStart() {
+        super.onStart()
+        if (firebaseAuth.currentUser != null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+    }
 }
