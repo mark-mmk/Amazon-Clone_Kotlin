@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_buyPage_to_homePage3"
             app:destination="@id/homePage" />
+        <action
+            android:id="@+id/action_buyPage_to_paymentPage"
+            app:destination="@id/paymentPage" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment2"
@@ -49,6 +52,15 @@
         <action
             android:id="@+id/action_profileFragment2_to_homePage"
             app:destination="@id/homePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentPage"
+        android:name="com.example.amazon.HomeScreen.PaymentPage"
+        android:label="Payment Page"
+        tools:layout="@layout/fragment_payment_page" >
+        <action
+            android:id="@+id/action_paymentPage_to_buyPage"
+            app:destination="@id/buyPage" />
     </fragment>
 
 </navigation>
