@@ -2,6 +2,7 @@ package com.example.amazon.LoginScreen
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.amazon.MainActivity
@@ -78,6 +79,7 @@ class LoginPageScreen : AppCompatActivity() {
     }
     override fun onStart() {
         super.onStart()
+
         if (firebaseAuth.currentUser != null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
