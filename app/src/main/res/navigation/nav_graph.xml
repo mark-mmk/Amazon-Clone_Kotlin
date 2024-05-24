@@ -24,19 +24,22 @@
         android:id="@+id/homePage"
         android:name="com.example.amazon.HomeScreen.HomePage"
         android:label="Home Page"
-        tools:layout="@layout/fragment_home_page" >
+        tools:layout="@layout/fragment_home_page">
         <action
             android:id="@+id/action_homePage_to_buyPage3"
             app:destination="@id/buyPage" />
         <action
             android:id="@+id/action_homePage_to_profileFragment2"
             app:destination="@id/profileFragment2" />
+        <action
+            android:id="@+id/action_homePage_to_allProductsFragment"
+            app:destination="@id/allProductsFragment" />
     </fragment>
     <fragment
         android:id="@+id/buyPage"
         android:name="com.example.amazon.HomeScreen.BuyPage"
         android:label="Buy Page"
-        tools:layout="@layout/fragment_buy_page" >
+        tools:layout="@layout/fragment_buy_page">
         <action
             android:id="@+id/action_buyPage_to_homePage3"
             app:destination="@id/homePage" />
@@ -48,7 +51,7 @@
         android:id="@+id/profileFragment2"
         android:name="com.example.amazon.HomeScreen.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileFragment2_to_homePage"
             app:destination="@id/homePage" />
@@ -57,10 +60,19 @@
         android:id="@+id/paymentPage"
         android:name="com.example.amazon.HomeScreen.PaymentPage"
         android:label="Payment Page"
-        tools:layout="@layout/fragment_payment_page" >
+        tools:layout="@layout/fragment_payment_page">
         <action
             android:id="@+id/action_paymentPage_to_buyPage"
             app:destination="@id/buyPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/allProductsFragment"
+        android:name="com.example.amazon.HomeScreen.AllProductsFragment"
+        android:label="Products"
+        tools:layout="@layout/fragment_all_products">
+        <argument
+            android:name="category_name"
+            app:argType="string" />
     </fragment>
 
 </navigation>

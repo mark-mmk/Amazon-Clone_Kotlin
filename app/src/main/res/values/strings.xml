@@ -13,4 +13,7 @@
     <string name="email">Email : %s</string>
     <string name="profile_name">Name : %$</string>
     <string name="profile_phone">Phone : %$</string>
+    <string name="no_data_found">No Data Found</string>
+    <string name="show_more"><![CDATA[See More >>]]></string>
+    <string name="price">%s EGP</string>
 </resources>
