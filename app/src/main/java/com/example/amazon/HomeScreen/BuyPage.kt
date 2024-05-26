@@ -136,8 +136,11 @@ class BuyPage : Fragment() {
         if (db != null) {
             val currentProduct = db!!.cartDao().getProductById(productId)
             if (currentProduct.quantity ==1)
-            currentProduct.quantity=1
             db!!.cartDao().updateCartItem(currentProduct)
+            else {
+                currentProduct.quantity--
+                db!!.cartDao().updateCartItem(currentProduct)
+            }
 
         }
 
