@@ -19,6 +19,7 @@ import com.example.amazon.RetrofitHelper
 import com.example.amazon.databinding.FragmentHomePageBinding
 import com.example.amazon.products.ProductsAdapter
 import com.example.amazon.products.ProductsResponseArr
+import com.paypal.android.sdk.db
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -123,10 +124,6 @@ class HomePage : Fragment(){
 
 
     }
-
-
-
-
 
     //add click listener to image to add to cart
     private fun onImageAddToCartClick(product: ProductResponseItem) {
