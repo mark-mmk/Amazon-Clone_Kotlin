@@ -1,10 +1,20 @@
 package com.example.amazon.products
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+
+import android.widget.Toast
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
+
 import androidx.recyclerview.widget.RecyclerView
+import com.example.amazon.Adapter.CategoryAdapter
+import com.example.amazon.HomeScreen.HomePageDirections
+import com.example.amazon.LoginScreen.RegisterPageScreen
+import com.example.amazon.ProductsDescription
 import com.example.amazon.R
 import com.example.amazon.databinding.RowProductLayoutBinding
 import com.squareup.picasso.Picasso
@@ -18,15 +28,14 @@ class ProductsAdapter(
     private var clickListener: ProductClickListener?=null
 
 
-
+) :
+    RecyclerView.Adapter<ProductsAdapter.ProductsViewHolder>() {
     class ProductsViewHolder(binding: RowProductLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         var productImage = binding.RowProductImage
         var productTitle = binding.RowProductTitle
         var productPrice = binding.RowProductPrice
         var productRating = binding.RowProductRatingBar
-        var imageAddToCart = binding.RowProductAddToCart
-
 
     }
 
@@ -54,7 +63,6 @@ private fun displayIconCart(image : ImageView,productID:Int) {
         holder.productTitle.text = product.title
         holder.productPrice.text = context.getString(R.string.price, product.price.toString())
         holder.productRating.rating = product.rating.rate.toFloat()
-
         Picasso.get()
             .load(product.image)
             .placeholder(R.drawable.img_loading)
@@ -71,16 +79,8 @@ private fun displayIconCart(image : ImageView,productID:Int) {
 
         }
 
-    }
-
-    fun setOnItemClickListener(listener: ProductClickListener) {
-        clickListener=listener
-    }
-
-
-    interface ProductClickListener {
-        fun onCartClick(product: ProductResponseItem)
-        fun onImageClick(product: ProductResponseItem)
 
     }
+
+
 }
