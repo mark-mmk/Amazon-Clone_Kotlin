@@ -32,7 +32,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class HomePage : Fragment() {
     private var _binding: FragmentHomePageBinding? = null
     private val binding get() = _binding!!
     private lateinit var categoriesRecyclerView: RecyclerView
@@ -49,7 +49,6 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var productsIds: List<Int>?=null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.swiperefresh.setOnRefreshListener(this)
         productsProgressBar = view.findViewById(R.id.ProductsProgressBar)
         productsNoDataFound = view.findViewById(R.id.ProductsNoDataFoundImg)
         productsRecyclerView = view.findViewById(R.id.ProductsRecyclerView)
@@ -241,15 +240,7 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             })
     }
 
-    override fun onRefresh() {
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            var i = Intent(requireActivity(), MainActivity::class.java)
-//            startActivity(i)
-//            Toast.makeText(requireActivity(), "Refresh", Toast.LENGTH_LONG).show()
-//            binding.swiperefresh.isRefreshing = false
-//        }, 2000)
-        binding.swiperefresh.isRefreshing = false
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
