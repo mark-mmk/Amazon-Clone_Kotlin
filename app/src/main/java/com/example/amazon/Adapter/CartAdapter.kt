@@ -2,61 +2,49 @@ package com.example.amazon.Adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.amazon.R
-import com.example.amazon.test.carttest
+import com.example.amazon.dataBase.CartItem
+import com.example.amazon.databinding.RowCartItemLayoutBinding
+import com.squareup.picasso.Picasso
 
 
-class CartAdapter(private var list: ArrayList<carttest>) :
+class CartAdapter(private var list:List<CartItem>) :
     RecyclerView.Adapter<CartAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(binding:RowCartItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        val card_product: ImageView = itemView.findViewById(R.id.cart_product)
-        val card_product_name: TextView = itemView.findViewById(R.id.cart_product_name)
-        val card_product_price: TextView = itemView.findViewById(R.id.cart_product_price)
-        val card_product_size: TextView = itemView.findViewById(R.id.cart_product_Size)
-        val add: AppCompatButton = itemView.findViewById(R.id.button_cart_item_add)
-        val mines: AppCompatButton = itemView.findViewById(R.id.button_cart_item_mines)
-        val Count: TextView = itemView.findViewById(R.id.cart_item_count)
+        val imageProductCart: ImageView = binding.RowCartProductImage
+        val titleProductCart: TextView = binding.RowCartProductTitle
+        val priceProductCart: TextView = binding.RowCartProductPrice
+        val quantityProductCart: TextView = binding.RowCartProductTVQuantity
+        val plusProductCart: TextView = binding.RowCartProductBtnPlus
+        val minusProductCart: TextView = binding.RowCartProductBtnMines
+        val removeProductCart: Button = binding.RowCartProductBtnRemove
+
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.row_cart_item, parent, false)
+            RowCartItemLayoutBinding.inflate(LayoutInflater.from(parent.context))
         )
     }
 
     @SuppressLint("ResourceAsColor", "SetTextI18n", "MissingInflatedId")
-    override fun onBindViewHolder(holder: CartAdapter.ViewHolder, position: Int) {
-        holder.card_product.setImageResource(R.drawable.icon)
-        holder.card_product_name.setText("mark mekhail")
-        holder.card_product_price.setText("100")
-        holder.card_product_size.setText("8")
-        var count: Int = 0
-        holder.add.setOnClickListener {
-            count++
-            holder.Count.text = count.toString()
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val cartProduct = list[position]
+        Picasso.get().load(cartProduct.image)
+            .placeholder(R.drawable.img_loading)
+            .into(holder.imageProductCart)
 
-        }
-
-        holder.mines.setOnClickListener {
-            if(count > 0){
-                count--
-                holder.Count.text = count.toString()
-            }else{
-                holder.Count.text = count.toString()
-            }
-        }
-
+        holder.titleProductCart.text = cartProduct.title
+        holder.priceProductCart.text = cartProduct.price.toString()
+        holder.quantityProductCart.text = cartProduct.quantity.toString()
 
     }
 

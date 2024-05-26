@@ -57,8 +57,8 @@
                 android:theme="@style/CustomRatingBar" />
             <ImageView
                 android:id="@+id/RowProductAddToCart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_add_to_cart"
                 android:contentDescription="Add to cart"
