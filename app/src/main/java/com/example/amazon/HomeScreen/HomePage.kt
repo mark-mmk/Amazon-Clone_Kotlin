@@ -32,7 +32,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class HomePage : Fragment() {
     private var _binding: FragmentHomePageBinding? = null
     private val binding get() = _binding!!
     private lateinit var categoriesRecyclerView: RecyclerView
@@ -49,7 +49,6 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var productsIds: List<Int>?=null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.swiperefresh.setOnRefreshListener(this)
         productsProgressBar = view.findViewById(R.id.ProductsProgressBar)
         productsNoDataFound = view.findViewById(R.id.ProductsNoDataFoundImg)
         productsRecyclerView = view.findViewById(R.id.ProductsRecyclerView)
@@ -148,25 +147,47 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     //add click listener to image to add to cart
     private fun onImageAddToCartClick(product: ProductResponseItem) {
 
-
         if (userId!=null) {
             if (isProductInCart(product.id)){
                 db!!.cartDao().deleteProductFromCart(userId!!,product.id)
-                Toast.makeText(requireContext(),"Added To Cart",Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(),"Deleted",Toast.LENGTH_LONG).show()
             }else{
-                db!!.cartDao().insertProductToCart(
-                    CartItem(
-                        0, userId!!, product.id, 1, product.price,
-                        (product.price * 1), product.image, product.title,
-                        2024
+                val currentProduct = db!!.cartDao().getProductById(product.id)
+                if (currentProduct!=null&&currentProduct.productId.toString().isNotEmpty()){
+                    db!!.cartDao().updateCartItem(
+                        CartItem(
+                            currentProduct.cartId, userId!!, currentProduct.productId,
+                            currentProduct.quantity+1, product.price,
+                            (product.price *( currentProduct.quantity+1)), product.image, product.title,
+                            2024
+                        )
                     )
-                )
+                    Toast.makeText(requireContext(),"Updated",Toast.LENGTH_LONG).show()
+
+                }
+                else{
+                    db!!.cartDao().insertProductToCart(
+                        CartItem(
+                            0, userId!!, product.id, 1, product.price,
+                            (product.price * 1), product.image, product.title,
+                            2024
+                        )
+                    )
+                    Toast.makeText(requireContext(),"Added To Cart",Toast.LENGTH_LONG).show()
+
+                }
             }
+            updateProductsIds(userId!!)
         } else {
             Toast.makeText(
                 requireContext(), "Please Login First No User!!", Toast.LENGTH_LONG).show()
         }
 
+    }
+
+    private fun updateProductsIds(userId: String) {
+        productsIds=db!!.cartDao().getListOfProductsIdsOfCurrentUserById(userId)
+        productAdapter.productsIds=productsIds
     }
 
     private fun isProductInCart(productId: Int): Boolean {
@@ -219,14 +240,7 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             })
     }
 
-    override fun onRefresh() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            var i = Intent(requireActivity(), MainActivity::class.java)
-            startActivity(i)
-            Toast.makeText(requireActivity(), "Refresh", Toast.LENGTH_LONG).show()
-            binding.swiperefresh.isRefreshing = false
-        }, 2000)
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

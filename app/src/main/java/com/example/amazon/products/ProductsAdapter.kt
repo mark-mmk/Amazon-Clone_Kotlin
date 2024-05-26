@@ -11,7 +11,7 @@ import com.squareup.picasso.Picasso
 class ProductsAdapter(
     private val productsArrayList: ArrayList<ProductResponseItem>,
     private val context: Context,
-    private var productsIds:List<Int>?=null
+    var productsIds:List<Int>?=null
 ) : RecyclerView.Adapter<ProductsAdapter.ProductsViewHolder>() {
 
     private var clickListener: ProductClickListener?=null
