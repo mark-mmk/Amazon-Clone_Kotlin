@@ -101,6 +101,83 @@ class HomePage : Fragment(){
             })
     }
 
+
+    private fun addClickListener() {
+        productAdapter.setOnItemClickListener(object : ProductsAdapter.ProductClickListener {
+            override fun onCartClick(product: ProductResponseItem) {
+                onImageAddToCartClick(product)
+            }
+            override fun onImageClick(product: ProductResponseItem) {
+                val action =
+                    HomePageDirections.actionHomePageToProductsDescription(product.id.toString())
+                findNavController().navigate(action)
+                Toast.makeText(requireContext(),"Product Description",Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    private fun getProductsIdsOfCurrentUserById(user_id: String?) {
+        if (user_id!=null&&db!=null){
+            productsIds=db!!.cartDao().getListOfProductsIdsOfCurrentUserById(user_id)
+        }
+
+
+    }
+
+
+
+
+
+    //add click listener to image to add to cart
+    private fun onImageAddToCartClick(product: ProductResponseItem) {
+
+        if (userId!=null) {
+            if (isProductInCart(product.id)){
+                db!!.cartDao().deleteProductFromCart(userId!!,product.id)
+                Toast.makeText(requireContext(),"Deleted",Toast.LENGTH_LONG).show()
+            }else{
+                val currentProduct = db!!.cartDao().getProductById(product.id)
+                if (currentProduct!=null&&currentProduct.productId.toString().isNotEmpty()){
+                    db!!.cartDao().updateCartItem(
+                        CartItem(
+                            currentProduct.cartId, userId!!, currentProduct.productId,
+                            currentProduct.quantity+1, product.price,
+                            (product.price *( currentProduct.quantity+1)), product.image, product.title,
+                            2024
+                        )
+                    )
+                    Toast.makeText(requireContext(),"Updated",Toast.LENGTH_LONG).show()
+
+                }
+                else{
+                    db!!.cartDao().insertProductToCart(
+                        CartItem(
+                            0, userId!!, product.id, 1, product.price,
+                            (product.price * 1), product.image, product.title,
+                            2024
+                        )
+                    )
+                    Toast.makeText(requireContext(),"Added To Cart",Toast.LENGTH_LONG).show()
+
+                }
+            }
+            updateProductsIds(userId!!)
+        } else {
+            Toast.makeText(
+                requireContext(), "Please Login First No User!!", Toast.LENGTH_LONG).show()
+        }
+
+    }
+
+    private fun updateProductsIds(userId: String) {
+        productsIds=db!!.cartDao().getListOfProductsIdsOfCurrentUserById(userId)
+        productAdapter.productsIds=productsIds
+    }
+
+    private fun isProductInCart(productId: Int): Boolean {
+        return productsIds?.contains(productId) == true
+    }
+
     private fun getAllCategories() {
         categoriesProgressBar.visibility = View.VISIBLE
         categoriesRecyclerView.visibility = View.GONE
@@ -145,7 +222,6 @@ class HomePage : Fragment(){
 
             })
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

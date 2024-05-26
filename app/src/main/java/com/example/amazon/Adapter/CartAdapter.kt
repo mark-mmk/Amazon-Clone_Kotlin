@@ -13,10 +13,12 @@ import com.example.amazon.databinding.RowCartItemLayoutBinding
 import com.squareup.picasso.Picasso
 
 
-class CartAdapter(private var list:List<CartItem>) :
+class CartAdapter(private var list: List<CartItem>) :
     RecyclerView.Adapter<CartAdapter.ViewHolder>() {
 
-    class ViewHolder(binding:RowCartItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+    private var clickListener: ClickListener? = null
+
+    class ViewHolder(binding: RowCartItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
 
         val imageProductCart: ImageView = binding.RowCartProductImage
         val titleProductCart: TextView = binding.RowCartProductTitle
@@ -46,10 +48,34 @@ class CartAdapter(private var list:List<CartItem>) :
         holder.priceProductCart.text = cartProduct.price.toString()
         holder.quantityProductCart.text = cartProduct.quantity.toString()
 
+        holder.plusProductCart.setOnClickListener {
+            clickListener?.onPlusClick(position)
+        }
+        holder.minusProductCart.setOnClickListener {
+            clickListener?.onMinusClick(position)
+        }
+        holder.removeProductCart.setOnClickListener {
+            clickListener?.onRemoveClick(cartProduct.productId)
+        }
+
     }
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    fun updateList(newList: List<CartItem>) {
+        list = newList
+    }
+
+    fun setOnItemClickListener(clickListener: ClickListener) {
+        this.clickListener = clickListener
+    }
+
+    interface ClickListener {
+        fun onPlusClick(productId: Int)
+        fun onMinusClick(productId: Int)
+        fun onRemoveClick(productId: Int)
     }
 }
 

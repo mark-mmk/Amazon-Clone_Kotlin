@@ -37,6 +37,10 @@
                 android:id="@+id/Total_Items"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="@string/itemsInCart"
+                android:textSize="@dimen/_15sdp"
+                android:textStyle="bold"
                 android:layout_weight="1"
                 android:text="SubTotal Items(0)"
                 android:textColor="@color/black" />
@@ -68,6 +72,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/cart_price"
+                android:maxLines="1"
                 android:text="$0"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/black"
