@@ -32,6 +32,7 @@
             android:enabled="false"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username_payment_Layout"
         style="@style/LoginTextInputOuterFieldStyle"
