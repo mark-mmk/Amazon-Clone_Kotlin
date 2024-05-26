@@ -20,10 +20,14 @@ import com.example.amazon.Adapter.CategoryAdapter
 import com.example.amazon.MainActivity
 import com.example.amazon.R
 import com.example.amazon.RetrofitHelper
+import com.example.amazon.dataBase.AppDataBase
+import com.example.amazon.dataBase.CartItem
 
 import com.example.amazon.databinding.FragmentHomePageBinding
+import com.example.amazon.products.ProductResponseItem
 import com.example.amazon.products.ProductsAdapter
 import com.example.amazon.products.ProductsResponseArr
+import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,13 +42,20 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var productsNoDataFound: ImageView
     private lateinit var categories: ArrayList<String>
     private lateinit var categoryAdapter: CategoryAdapter
-
+    private lateinit var productAdapter: ProductsAdapter
+    private lateinit var firebaseAuth: FirebaseAuth
+    private var userId: String? = null
+    private var db: AppDataBase? = null
+    private var productsIds: List<Int>?=null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.swiperefresh.setOnRefreshListener(this)
         productsProgressBar = view.findViewById(R.id.ProductsProgressBar)
         productsNoDataFound = view.findViewById(R.id.ProductsNoDataFoundImg)
         productsRecyclerView = view.findViewById(R.id.ProductsRecyclerView)
+        firebaseAuth = FirebaseAuth.getInstance()
+        userId = firebaseAuth.currentUser?.uid
+        db = AppDataBase.DatabaseBuilder.getInstance(requireContext())
         productsRecyclerView.layoutManager =
             GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
 
@@ -54,8 +65,10 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         categoriesRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
+        getProductsIdsOfCurrentUserById(userId)
         getAllCategories()
         getLimitProducts()
+
         binding.HomeProductsSeeMoreTV.setOnClickListener {
             navigationToProducts("products")
         }
@@ -63,10 +76,10 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     }
 
-    private fun navigationToProducts(categoryName: String ) {
+    private fun navigationToProducts(categoryName: String) {
         val action = HomePageDirections.actionHomePageToAllProductsFragment(categoryName)
-        findNavController().navigate(action)    }
-
+        findNavController().navigate(action)
+    }
 
 
     private fun getLimitProducts(limit: Int = 8) {
@@ -82,7 +95,8 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     if (response.isSuccessful && response.body()!!.size > 0) {
 
                         val products = response.body()!!
-                        val productAdapter = ProductsAdapter(products, requireContext())
+                        productAdapter = ProductsAdapter(products, requireContext(),productsIds)
+                        addClickListener()
                         productsRecyclerView.adapter = productAdapter
                         productsProgressBar.visibility = View.GONE
                         productsRecyclerView.visibility = View.VISIBLE
@@ -103,6 +117,60 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 }
 
             })
+    }
+
+    private fun addClickListener() {
+        productAdapter.setOnItemClickListener(object : ProductsAdapter.ProductClickListener {
+            override fun onCartClick(product: ProductResponseItem) {
+                onImageAddToCartClick(product)
+            }
+            override fun onImageClick(product: ProductResponseItem) {
+                val action =
+                    HomePageDirections.actionHomePageToProductsDescription(product.id.toString())
+                findNavController().navigate(action)
+                Toast.makeText(requireContext(),"Product Description",Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    private fun getProductsIdsOfCurrentUserById(user_id: String?) {
+        if (user_id!=null&&db!=null){
+            productsIds=db!!.cartDao().getListOfProductsIdsOfCurrentUserById(user_id)
+        }
+
+
+    }
+
+
+
+
+
+    //add click listener to image to add to cart
+    private fun onImageAddToCartClick(product: ProductResponseItem) {
+
+
+        if (userId!=null) {
+            if (isProductInCart(product.id)){
+                db!!.cartDao().deleteProductFromCart(userId!!,product.id)
+                Toast.makeText(requireContext(),"Added To Cart",Toast.LENGTH_LONG).show()
+            }else{
+                db!!.cartDao().insertProductToCart(
+                    CartItem(
+                        0, userId!!, product.id, 1, product.price,
+                        (product.price * 1), product.image, product.title,
+                        2024
+                    )
+                )
+            }
+        } else {
+            Toast.makeText(
+                requireContext(), "Please Login First No User!!", Toast.LENGTH_LONG).show()
+        }
+
+    }
+
+    private fun isProductInCart(productId: Int): Boolean {
+        return productsIds?.contains(productId) == true
     }
 
     private fun getAllCategories() {
@@ -140,15 +208,17 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             })
     }
+
     private fun categoryClick() {
         categoryAdapter.setOnCategoryClickListener(
-            object :CategoryAdapter.CategoryClickListener{
+            object : CategoryAdapter.CategoryClickListener {
                 override fun onCategoryClick(categoryName: String) {
                     navigationToProducts(categoryName)
                 }
 
             })
     }
+
     override fun onRefresh() {
         Handler(Looper.getMainLooper()).postDelayed({
             var i = Intent(requireActivity(), MainActivity::class.java)

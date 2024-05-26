@@ -4,7 +4,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-
+    id("kotlin-kapt")
 }
 
 android {
@@ -68,8 +68,12 @@ dependencies {
 
     implementation ("com.google.android.material:material:1.3.0-alpha03")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
+   // picasso
+    implementation ("com.squareup.picasso:picasso:2.71828")
 
-    implementation ("com.squareup.picasso:picasso:2.8")
-
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("com.google.code.gson:gson:2.10.1")
 
 }
