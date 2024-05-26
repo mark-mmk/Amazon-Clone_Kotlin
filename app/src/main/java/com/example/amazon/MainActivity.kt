@@ -57,13 +57,7 @@ class MainActivity : AppCompatActivity() {
                 R.string.nav_open, R.string.nav_close)
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
     }
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-//            true
-//        } else super.onOptionsItemSelected(item)
-//    }
+
 
 }

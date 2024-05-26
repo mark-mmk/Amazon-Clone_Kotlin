@@ -1,16 +1,25 @@
 package com.example.amazon.products
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.amazon.Adapter.CategoryAdapter
+import com.example.amazon.HomeScreen.HomePageDirections
+import com.example.amazon.LoginScreen.RegisterPageScreen
+import com.example.amazon.ProductsDescription
 import com.example.amazon.R
 import com.example.amazon.databinding.RowProductLayoutBinding
 import com.squareup.picasso.Picasso
 
 class ProductsAdapter(
     private val productsArrayList: ArrayList<ProductResponseItem>,
-    private val context: Context
+    private val context: Context,
+
 ) :
     RecyclerView.Adapter<ProductsAdapter.ProductsViewHolder>() {
     class ProductsViewHolder(binding: RowProductLayoutBinding) :
@@ -19,7 +28,6 @@ class ProductsAdapter(
         var productTitle = binding.RowProductTitle
         var productPrice = binding.RowProductPrice
         var productRating = binding.RowProductRatingBar
-
 
     }
 
@@ -37,9 +45,8 @@ class ProductsAdapter(
     override fun onBindViewHolder(holder: ProductsViewHolder, position: Int) {
         val product = productsArrayList[position]
         holder.productTitle.text = product.title
-        holder.productPrice.text = context.getString(R.string.price,product.price.toString())
+        holder.productPrice.text = context.getString(R.string.price, product.price.toString())
         holder.productRating.rating = product.rating.rate.toFloat()
-
         Picasso.get()
             .load(product.image)
             .placeholder(R.drawable.img_loading)
@@ -47,4 +54,6 @@ class ProductsAdapter(
 
 
     }
+
+
 }

@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.amazon.R
 import com.example.amazon.RetrofitHelper
 import com.example.amazon.databinding.FragmentAllProductsBinding
-import com.example.amazon.databinding.FragmentHomePageBinding
 import com.example.amazon.products.ProductsAdapter
 import com.example.amazon.products.ProductsResponseArr
 import retrofit2.Call
@@ -132,15 +131,12 @@ class AllProductsFragment : Fragment() {
             })
     }
 
-
-
-
-
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
+
+
 
 
 }
