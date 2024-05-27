@@ -26,9 +26,18 @@ import androidx.navigation.fragment.findNavController
 import com.example.amazon.LoginScreen.LoginPageScreen
 import com.example.amazon.R
 import com.example.amazon.databinding.FragmentProfileBinding
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
+import com.google.firebase.storage.storage
+import kotlinx.coroutines.tasks.await
 import java.io.ByteArrayOutputStream
+import java.io.File
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
@@ -110,36 +119,41 @@ class ProfileFragment : Fragment() {
             if (requestCode == 1) {
                 val imageBitmap = data?.extras?.get("data") as Bitmap
                 binding.profileImage.setImageBitmap(imageBitmap)
+                val userId = FirebaseAuth.getInstance().currentUser!!.uid
+                val storage = Firebase.storage
+                val storageRef = storage.reference
+                val mountainsRef = storageRef.child("profile/$userId")
+                val baos = ByteArrayOutputStream()
+                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                val data = baos.toByteArray()
+                val uploadTask = mountainsRef.putBytes(data)
+                uploadTask.addOnSuccessListener { taskSnapshot ->
+                    val downloadUrl = taskSnapshot.storage.downloadUrl
+                    downloadUrl.addOnSuccessListener { url ->
 
-                val sharedPreferences = requireActivity().getSharedPreferences(
-                    "MySharedPref",
-                    AppCompatActivity.MODE_PRIVATE
-                )
-                val myEdit = sharedPreferences.edit()
-                val bitmap = binding.profileImage.drawable.toBitmap()
-                val stream = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-                val byteArray = stream.toByteArray()
-                myEdit.putString("image", Base64.encodeToString(byteArray, Base64.DEFAULT))
-                myEdit.apply()
-                Toast.makeText(requireActivity(), "Done", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireActivity(), "Done", Toast.LENGTH_LONG).show()
+                    }
+                }.addOnFailureListener { exception ->
+                    Toast.makeText(requireActivity(), "Error", Toast.LENGTH_LONG).show()
+                }
             }
             if (requestCode == 100) {
                 binding.profileImage.setImageURI(data?.data)
-
-
-                val sharedPreferences = requireActivity().getSharedPreferences(
-                    "MySharedPref",
-                    AppCompatActivity.MODE_PRIVATE
-                )
-                val myEdit = sharedPreferences.edit()
-                val bitmap = binding.profileImage.drawable.toBitmap()
-                val stream = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-                val byteArray = stream.toByteArray()
-                myEdit.putString("image", Base64.encodeToString(byteArray, Base64.DEFAULT))
-                myEdit.apply()
-                Toast.makeText(requireActivity(), "Done", Toast.LENGTH_LONG).show()
+                val userId = FirebaseAuth.getInstance().currentUser!!.uid
+                val storage = Firebase.storage
+                val storageRef = storage.reference
+                val mountainsRef = storageRef.child("profile/$userId")
+                val baos = ByteArrayOutputStream()
+                val data = baos.toByteArray()
+                val uploadTask = mountainsRef.putBytes(data)
+                uploadTask.addOnSuccessListener { taskSnapshot ->
+                    val downloadUrl = taskSnapshot.storage.downloadUrl
+                    downloadUrl.addOnSuccessListener { url ->
+                        Toast.makeText(requireActivity(), "Done", Toast.LENGTH_LONG).show()
+                    }
+                }.addOnFailureListener { exception ->
+                    Toast.makeText(requireActivity(), "Error", Toast.LENGTH_LONG).show()
+                }
             }
         }
         if (resultCode == AppCompatActivity.RESULT_OK) {
@@ -168,13 +182,15 @@ class ProfileFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val shared =
-            requireActivity().getSharedPreferences("MySharedPref", AppCompatActivity.MODE_PRIVATE)
-        val imageString = shared.getString("image", "")
-        if (imageString!!.isNotEmpty()) {
-            val byteArray = Base64.decode(imageString, Base64.DEFAULT)
-            val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+        val storage = Firebase.storage
+        val storageRef = storage.reference
+        val mountainsRef = storageRef.child("profile/$userId")
+        mountainsRef.getBytes(Long.MAX_VALUE).addOnSuccessListener { bytes ->
+            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
             binding.profileImage.setImageBitmap(bitmap)
+        }.addOnFailureListener { exception ->
+            Toast.makeText(requireActivity(), "Error", Toast.LENGTH_LONG).show()
         }
     }
 }

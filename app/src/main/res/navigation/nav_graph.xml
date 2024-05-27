@@ -77,11 +77,15 @@
         <action
             android:id="@+id/action_paymentPage_to_buyPage"
             app:destination="@id/buyPage" />
+        <argument
+            app:argType="string"
+            android:name="price"
+            />
     </fragment>
     <fragment
         android:id="@+id/productsDescription"
         android:name="com.example.amazon.ProductsDescription"
-        android:label="fragment_products_description"
+        android:label="Products description"
         tools:layout="@layout/fragment_products_description" >
         <argument
             app:argType="string"

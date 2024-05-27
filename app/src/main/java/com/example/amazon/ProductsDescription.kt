@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import com.example.amazon.HomeScreen.AllProductsFragmentArgs
 import com.example.amazon.databinding.FragmentAllProductsBinding
@@ -44,6 +45,7 @@ class ProductsDescription : Fragment() {
                         binding.title.text = productsArrayList[0].title
                         binding.description.text = productsArrayList[0].description
                         binding.rBar.rating = productsArrayList[0].rating.rate.toFloat()
+                        binding.rBar.isEnabled=false
                         binding.price.text = productsArrayList[0].price.toString()
                     } else {
                         Toast.makeText(requireContext(), "No Data Found", Toast.LENGTH_LONG).show()
@@ -53,7 +55,6 @@ class ProductsDescription : Fragment() {
                 override fun onFailure(call: Call<ProductsResponseArr>, t: Throwable) {
                     Toast.makeText(requireContext(), " Error: ${t.message}", Toast.LENGTH_LONG)
                         .show()
-
                 }
 
             })

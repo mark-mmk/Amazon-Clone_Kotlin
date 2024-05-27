@@ -12,18 +12,26 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.amazon.Adapter.CategoryAdapter
 import com.example.amazon.R
 import com.example.amazon.RetrofitHelper
+import com.example.amazon.dataBase.AppDataBase
+import com.example.amazon.dataBase.CartItem
 
 import com.example.amazon.databinding.FragmentHomePageBinding
+import com.example.amazon.products.ProductResponseItem
 import com.example.amazon.products.ProductsAdapter
 import com.example.amazon.products.ProductsResponseArr
+import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class HomePage : Fragment(){
+class HomePage : Fragment() {
     private var _binding: FragmentHomePageBinding? = null
     private val binding get() = _binding!!
     private lateinit var categoriesRecyclerView: RecyclerView
@@ -33,13 +41,19 @@ class HomePage : Fragment(){
     private lateinit var productsNoDataFound: ImageView
     private lateinit var categories: ArrayList<String>
     private lateinit var categoryAdapter: CategoryAdapter
-    private lateinit var productsAdapter: ProductsAdapter
-
+    private lateinit var productAdapter: ProductsAdapter
+    private lateinit var firebaseAuth: FirebaseAuth
+    private var userId: String? = null
+    private var db: AppDataBase? = null
+    private var productsIds: List<Int>? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         productsProgressBar = view.findViewById(R.id.ProductsProgressBar)
         productsNoDataFound = view.findViewById(R.id.ProductsNoDataFoundImg)
         productsRecyclerView = view.findViewById(R.id.ProductsRecyclerView)
+        firebaseAuth = FirebaseAuth.getInstance()
+        userId = firebaseAuth.currentUser?.uid
+        db = AppDataBase.DatabaseBuilder.getInstance(requireContext())
         productsRecyclerView.layoutManager =
             GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
 
@@ -48,9 +62,13 @@ class HomePage : Fragment(){
         categoriesRecyclerView = binding.HomeRecyclerCategory
         categoriesRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        if (userId != null) {
+            getProductsIdsOfCurrentUserById(userId)
 
+        }
         getAllCategories()
         getLimitProducts()
+
         binding.HomeProductsSeeMoreTV.setOnClickListener {
             navigationToProducts("products")
         }
@@ -58,11 +76,10 @@ class HomePage : Fragment(){
 
     }
 
-    private fun navigationToProducts(categoryName: String ) {
+    private fun navigationToProducts(categoryName: String) {
         val action = HomePageDirections.actionHomePageToAllProductsFragment(categoryName)
         findNavController().navigate(action)
     }
-
 
 
     private fun getLimitProducts(limit: Int = 8) {
@@ -78,7 +95,8 @@ class HomePage : Fragment(){
                     if (response.isSuccessful && response.body()!!.size > 0) {
 
                         val products = response.body()!!
-                        val productAdapter = ProductsAdapter(products, requireContext())
+                        productAdapter = ProductsAdapter(products, requireContext(),productsIds)
+                        addClickListener()
                         productsRecyclerView.adapter = productAdapter
                         productsProgressBar.visibility = View.GONE
                         productsRecyclerView.visibility = View.VISIBLE
@@ -101,12 +119,12 @@ class HomePage : Fragment(){
             })
     }
 
-
     private fun addClickListener() {
         productAdapter.setOnItemClickListener(object : ProductsAdapter.ProductClickListener {
             override fun onCartClick(product: ProductResponseItem) {
                 onImageAddToCartClick(product)
             }
+
             override fun onImageClick(product: ProductResponseItem) {
                 val action =
                     HomePageDirections.actionHomePageToProductsDescription(product.id.toString())
@@ -125,53 +143,36 @@ class HomePage : Fragment(){
     }
 
 
-
-
-
     //add click listener to image to add to cart
     private fun onImageAddToCartClick(product: ProductResponseItem) {
 
-        if (userId!=null) {
-            if (isProductInCart(product.id)){
-                db!!.cartDao().deleteProductFromCart(userId!!,product.id)
-                Toast.makeText(requireContext(),"Deleted",Toast.LENGTH_LONG).show()
-            }else{
-                val currentProduct = db!!.cartDao().getProductById(product.id)
-                if (currentProduct!=null&&currentProduct.productId.toString().isNotEmpty()){
-                    db!!.cartDao().updateCartItem(
-                        CartItem(
-                            currentProduct.cartId, userId!!, currentProduct.productId,
-                            currentProduct.quantity+1, product.price,
-                            (product.price *( currentProduct.quantity+1)), product.image, product.title,
-                            2024
-                        )
-                    )
-                    Toast.makeText(requireContext(),"Updated",Toast.LENGTH_LONG).show()
+        if (userId != null) {
+            if (isProductInCart(product.id)) {
+                db!!.cartDao().deleteProductFromCart(userId!!, product.id)
+                Toast.makeText(requireContext(), "Deleted From Cart ", Toast.LENGTH_SHORT).show()
 
-                }
-                else{
+            } else {
+
                     db!!.cartDao().insertProductToCart(
                         CartItem(
                             0, userId!!, product.id, 1, product.price,
                             (product.price * 1), product.image, product.title,
-                            2024
                         )
                     )
-                    Toast.makeText(requireContext(),"Added To Cart",Toast.LENGTH_LONG).show()
-
+                    Toast.makeText(requireContext(), "Added To Cart", Toast.LENGTH_SHORT).show()
                 }
-            }
             updateProductsIds(userId!!)
         } else {
             Toast.makeText(
-                requireContext(), "Please Login First No User!!", Toast.LENGTH_LONG).show()
+                requireContext(), "Please Login First No User!!", Toast.LENGTH_LONG
+            ).show()
         }
 
     }
 
     private fun updateProductsIds(userId: String) {
-        productsIds=db!!.cartDao().getListOfProductsIdsOfCurrentUserById(userId)
-        productAdapter.productsIds=productsIds
+        productsIds = db!!.cartDao().getListOfProductsIdsOfCurrentUserById(userId)
+        productAdapter.productsIds = productsIds
     }
 
     private fun isProductInCart(productId: Int): Boolean {
@@ -213,15 +214,18 @@ class HomePage : Fragment(){
 
             })
     }
+
     private fun categoryClick() {
         categoryAdapter.setOnCategoryClickListener(
-            object :CategoryAdapter.CategoryClickListener{
+            object : CategoryAdapter.CategoryClickListener {
                 override fun onCategoryClick(categoryName: String) {
                     navigationToProducts(categoryName)
                 }
 
             })
     }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

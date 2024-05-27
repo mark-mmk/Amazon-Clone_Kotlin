@@ -93,16 +93,13 @@ class LoginPageScreen : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE)
         val myEdit = sharedPreferences.edit()
         myEdit.putString("user", binding.emailLogin.text.toString())
-        myEdit.putString("password", binding.passwordLogin.text.toString())
         myEdit.apply()
     }
     override fun onResume() {
         super.onResume()
         val shared = getSharedPreferences("MySharedPref", MODE_PRIVATE)
         val Name = shared.getString("user", "")
-        val Password = shared.getString("password", "")
         binding.emailLogin.setText(Name)
-        binding.passwordLogin.setText(Password)
     }
     override fun onStart() {
         super.onStart()
