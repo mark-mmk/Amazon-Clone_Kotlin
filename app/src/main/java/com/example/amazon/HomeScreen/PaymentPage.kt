@@ -23,7 +23,9 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.navigation.fragment.navArgs
 import com.example.amazon.MainActivity
+import com.example.amazon.ProductsDescriptionArgs
 import com.example.amazon.databinding.FragmentPaymentPageBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -41,6 +43,7 @@ class PaymentPage : Fragment() {
     private val binding get() = _binding!!
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
+    val args : PaymentPageArgs by navArgs()
     private val config = PayPalConfiguration()
         .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
         .clientId("AW1TdvpSGbIM5iP4HJNI5TyTmwpY9Gv9dYw8_8yW5lYIbCqf326vrkrp0ce9TAqjEGMHiV3OqJM_aRT0")
@@ -66,6 +69,9 @@ class PaymentPage : Fragment() {
         }.addOnFailureListener {
             Log.w(ContentValues.TAG, "Error getting documents: ", it)
         }
+        val price =args.price
+        binding.pricePayment.setText(price)
+
         binding.buy.setOnClickListener {
             val channel = NotificationChannel(
                 "channel_one",
@@ -88,7 +94,7 @@ class PaymentPage : Fragment() {
             var sendNotification = NotificationCompat.Builder(requireActivity(), "channel_one")
                 .setSmallIcon(android.R.drawable.ic_popup_reminder)
                 .setContentTitle("Amazon@gmail.com")
-                .setContentText("Our dear client ${binding.usernamePayment.text.toString()},Phone Number ${binding.phonePayment.text.toString()}  successfully purchased by credit card Number ${binding.cardPayment.text.toString()}")
+                .setContentText("Our dear client ${binding.usernamePayment.text.toString()} , Phone Number ${binding.phonePayment.text.toString()}  successfully purchased by credit card Number ${binding.cardPayment.text.toString()}")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .build()
@@ -133,64 +139,5 @@ class PaymentPage : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            val confirmation = data?.getParcelableExtra<PaymentConfirmation>(PaymentActivity.EXTRA_RESULT_CONFIRMATION)
-            if (confirmation != null) {
-                try {
-                    if (ActivityCompat.checkSelfPermission(
-                            requireActivity(),
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ) != PackageManager.PERMISSION_GRANTED
-                    ) {
-                        ActivityCompat.requestPermissions(
-                            requireActivity(),
-                            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                            100
-                        )
-                    } else {
-                        val channel = NotificationChannel(
-                            "channel_one",
-                            "Channel One",
-                            NotificationManager.IMPORTANCE_DEFAULT
-                        ).apply {
-                            "Notifications"
-                        }
-                        val notificationManger =
-                            requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                        notificationManger.createNotificationChannel(channel)
-                        val intent = Intent(requireActivity(), MainActivity::class.java)
-                        val pendingIntent =
-                            PendingIntent.getActivities(
-                                requireActivity(),
-                                20,
-                                arrayOf(intent),
-                                PendingIntent.FLAG_IMMUTABLE
-                            )
-                        var sendNotification = NotificationCompat.Builder(requireActivity(), "channel_one")
-                            .setSmallIcon(android.R.drawable.ic_popup_reminder)
-                            .setContentTitle("Amazon@gmail.com")
-                            .setContentText("Our dear client ${binding.usernamePayment.text.toString()},Phone Number ${binding.phonePayment.text.toString()}  successfully purchased by credit card Number ${binding.cardPayment.text.toString()}")
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                            .setContentIntent(pendingIntent)
-                            .build()
-
-                        NotificationManagerCompat.from(requireActivity()).notify(1, sendNotification)
-
-                    }
-                    val paymentDetails = confirmation.toJSONObject().toString(4)
-                    Toast.makeText(requireContext(),"Payment Details: $paymentDetails",Toast.LENGTH_LONG).show()
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-            }
-        } else if (resultCode == Activity.RESULT_CANCELED) {
-            Toast.makeText(requireContext(),"Payment Cancelled",Toast.LENGTH_LONG).show()
-        } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
-            Toast.makeText(requireContext(),"Invalid Payment",Toast.LENGTH_LONG).show()
-
-        }
     }
 }

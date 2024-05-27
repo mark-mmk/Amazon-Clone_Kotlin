@@ -1,10 +1,15 @@
 package com.example.amazon.LoginScreen
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.amazon.MainActivity
 import com.example.amazon.databinding.ActivityLoginPageScreenBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -18,6 +23,28 @@ class LoginPageScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginPageScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.INTERNET),
+                1
+            )
+        } else {
+            val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo = connectivityManager.activeNetworkInfo
+
+            if (networkInfo != null && networkInfo.isConnected) {
+                // Internet connection is available
+                Toast.makeText(this@LoginPageScreen, "Network is Connected", Toast.LENGTH_LONG).show()
+
+            } else {
+                // Internet connection is not available
+                Toast.makeText(this@LoginPageScreen, "Network is Not Connected", Toast.LENGTH_LONG)
+                    .show()
+            }
+        }
         firebaseAuth = FirebaseAuth.getInstance()
         binding.signIn.setOnClickListener {
             val email = binding.emailLogin.text.toString()
@@ -66,16 +93,13 @@ class LoginPageScreen : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE)
         val myEdit = sharedPreferences.edit()
         myEdit.putString("user", binding.emailLogin.text.toString())
-        myEdit.putString("password", binding.passwordLogin.text.toString())
         myEdit.apply()
     }
     override fun onResume() {
         super.onResume()
         val shared = getSharedPreferences("MySharedPref", MODE_PRIVATE)
         val Name = shared.getString("user", "")
-        val Password = shared.getString("password", "")
         binding.emailLogin.setText(Name)
-        binding.passwordLogin.setText(Password)
     }
     override fun onStart() {
         super.onStart()

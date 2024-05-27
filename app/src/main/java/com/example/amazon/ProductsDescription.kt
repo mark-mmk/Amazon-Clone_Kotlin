@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import com.example.amazon.HomeScreen.AllProductsFragmentArgs
 import com.example.amazon.databinding.FragmentAllProductsBinding
@@ -30,31 +31,35 @@ class ProductsDescription : Fragment() {
         val details =args.productId
 
         RetrofitHelper.getInstance()
-            .getOneProductById(details.toInt()).enqueue(object : Callback<ProductResponseItem> {
+            .getproductsById(details).enqueue(object : Callback<ProductsResponseArr> {
                 override fun onResponse(
-                    call: Call<ProductResponseItem>,
-                    response: Response<ProductResponseItem>
+                    call: Call<ProductsResponseArr>,
+                    response: Response<ProductsResponseArr>
                 ) {
-                    if (response.isSuccessful) {
-                        productsArrayList.add(response.body()!!)
-                        Picasso.get()
+                    if (response.isSuccessful && response.body()!!.size > 0) {
+                        productsArrayList.add(response.body()!![0])
+                         Picasso.get()
                             .load(productsArrayList[0].image)
                             .placeholder(R.drawable.img_loading)
                             .into(binding.image)
                         binding.title.text = productsArrayList[0].title
                         binding.description.text = productsArrayList[0].description
                         binding.rBar.rating = productsArrayList[0].rating.rate.toFloat()
+                        binding.rBar.isEnabled=false
                         binding.price.text = productsArrayList[0].price.toString()
+                    } else {
+                        Toast.makeText(requireContext(), "No Data Found", Toast.LENGTH_LONG).show()
                     }
                 }
-                override fun onFailure(call: Call<ProductResponseItem>, t: Throwable) {
+
+                override fun onFailure(call: Call<ProductsResponseArr>, t: Throwable) {
                     Toast.makeText(requireContext(), " Error: ${t.message}", Toast.LENGTH_LONG)
                         .show()
                 }
 
-                })
+            })
 
-            }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
