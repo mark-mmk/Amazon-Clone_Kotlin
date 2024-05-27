@@ -18,6 +18,7 @@ import com.example.amazon.dataBase.AppDataBase
 import com.example.amazon.dataBase.CartItem
 import com.example.amazon.databinding.FragmentBuyPageBinding
 import com.google.firebase.auth.FirebaseAuth
+import kotlin.math.ceil
 
 class BuyPage : Fragment() {
     private var _binding: FragmentBuyPageBinding? = null
@@ -25,7 +26,7 @@ class BuyPage : Fragment() {
     private lateinit var cartProductRecyclerView: RecyclerView
     private lateinit var cartProductProgressBar: ProgressBar
     private lateinit var cartProductNoDataFound: ImageView
-    private  var cartAdapter: CartAdapter ?= null
+    private var cartAdapter: CartAdapter? = null
     private var userId: String? = null
     private var db: AppDataBase? = null
     private var productsInCart: List<CartItem>? = null
@@ -79,18 +80,19 @@ class BuyPage : Fragment() {
     private fun showCart() {
         getProductsOfCurrentUserById()
         if (productsInCart?.size!! > 0) {
-            cartAdapter =CartAdapter(productsInCart!!)
-            cartProductRecyclerView.adapter =cartAdapter
+            cartAdapter = CartAdapter(productsInCart!!, requireContext())
+            cartProductRecyclerView.adapter = cartAdapter
             cartProductProgressBar.visibility = View.GONE
             cartProductRecyclerView.visibility = View.VISIBLE
             cartProductNoDataFound.visibility = View.GONE
             calculateTotalPrice()
             addClickListener()
-            binding.TotalItems.text=resources.getString(R.string.itemsInCart,productsInCart!!.size)
-
+            binding.TotalItems.text =
+                resources.getString(R.string.itemsInCart, productsInCart!!.size)
 
 
         } else {
+            binding.TotalItems.text = resources.getString(R.string.itemsInCart, 0)
             cartProductProgressBar.visibility = View.GONE
             cartProductRecyclerView.visibility = View.GONE
             cartProductNoDataFound.visibility = View.VISIBLE
@@ -101,63 +103,90 @@ class BuyPage : Fragment() {
 
     private fun addClickListener() {
         cartAdapter?.setOnItemClickListener(object : CartAdapter.ClickListener {
-            override fun onPlusClick(productId: Int) {
 
+            override fun onPlusClick(cartProduct: CartItem, position: Int) {
+                incrementProductQuantity(cartProduct)
+                updateLayout(position)
             }
 
-            override fun onMinusClick(productId: Int) {
-
+            override fun onMinusClick(cartProduct: CartItem, position: Int) {
+                if (cartProduct.quantity == 1)
+                    Toast.makeText(requireContext(), "Product Quantity is 1", Toast.LENGTH_SHORT)
+                        .show()
+                else {
+                    decrementProductQuantity(cartProduct)
+                    updateLayout(position)
+                }
             }
 
-            override fun onRemoveClick(productId: Int) {
+
+            override fun onRemoveClick(productId: Int, position: Int) {
+
                 removeProductFromCart(productId, userId!!)
                 getProductsOfCurrentUserById()
-                showCart()
+                cartAdapter?.list = productsInCart!!
+                cartAdapter?.notifyItemRemoved(position)
+                calculateTotalPrice()
+                if (productsInCart!!.size == 0) {
+                        binding.TotalItems.text = resources.getString(R.string.itemsInCart, 0)
+                        binding.BuyDeliveryPriceNumber.text =
+                            resources.getString(R.string.checkout_price, 0.toString())
+                    binding.BuySubTotalPriceNum.text=resources.getString(R.string.checkout_price,0.toString())
+                    binding.BuyLastTotalPrice.text=resources.getString(R.string.checkout_price,0.toString())
+
+                }
+
+
             }
-
         })
-
     }
 
-    private fun removeProductFromCart(productId: Int ,userId:String ) {
+    private fun updateLayout(position: Int) {
+        getProductsOfCurrentUserById()
+        cartAdapter?.list = productsInCart!!
+        cartAdapter?.notifyItemChanged(position)
+        calculateTotalPrice()
+    }
+
+    private fun removeProductFromCart(productId: Int, userId: String) {
         if (db != null) {
             db!!.cartDao().deleteProductFromCart(userId, productId)
         }
-
     }
-    private fun incrementProductQuantity(productId: Int  ) {
+
+    private fun incrementProductQuantity(product: CartItem) {
         if (db != null) {
-            val currentProduct= db!!.cartDao().getProductById(productId)
-            currentProduct.quantity++
-            db!!.cartDao().updateCartItem(currentProduct)
+            product.quantity++
+            product.totalPrice = product.price * product.quantity
+            db!!.cartDao().updateCartItem(product)
         }
-
     }
-    private fun decrementProductQuantity(productId: Int  ) {
+
+    private fun decrementProductQuantity(product: CartItem) {
         if (db != null) {
-            val currentProduct = db!!.cartDao().getProductById(productId)
-            if (currentProduct.quantity ==1)
-            db!!.cartDao().updateCartItem(currentProduct)
-            else {
-                currentProduct.quantity--
-                db!!.cartDao().updateCartItem(currentProduct)
-            }
-
+            product.quantity--
+            product.totalPrice = product.price * product.quantity
+            db!!.cartDao().updateCartItem(product)
         }
-
     }
+
     private fun calculateTotalPrice() {
-        var res= 0.0
+        var res = 0.0
         if (productsInCart != null) {
             for (product in productsInCart!!) {
                 res += product.totalPrice
             }
-            this.subtotal=res
-            binding.BuyDeliveryPriceNumber.text=resources.getString(R.string.cart_price,100.toString())
-            binding.BuySubTotalPriceNum.text=resources.getString(R.string.cart_price,subtotal.toString())
-            binding.BuyLastTotalPrice.text=resources.getString(R.string.cart_price,(subtotal+100).toString())
-        }else{
-            Toast.makeText(requireContext(),"No Products In Cart",Toast.LENGTH_LONG).show()
+            this.subtotal = res
+            binding.BuyDeliveryPriceNumber.text =
+                resources.getString(R.string.checkout_price, 100.toString())
+            binding.BuySubTotalPriceNum.text = resources.getString(
+                R.string.checkout_price,
+                ceil(subtotal).toString()
+            )
+            binding.BuyLastTotalPrice.text =
+                resources.getString(R.string.checkout_price, ceil(subtotal + 100).toString())
+        } else {
+            Toast.makeText(requireContext(), "No Products In Cart", Toast.LENGTH_SHORT).show()
         }
     }
 
