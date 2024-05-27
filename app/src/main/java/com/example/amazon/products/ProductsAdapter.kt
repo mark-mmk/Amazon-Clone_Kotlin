@@ -66,8 +66,6 @@ private fun displayIconCart(image : ImageView,productID:Int) {
         holder.imageAddToCart.setOnClickListener {
             clickListener?.onCartClick(product)
             
-            holder.imageAddToCart.setImageResource(R.drawable.ic_in_cart)
-
             displayIconCart(holder.imageAddToCart,product.id)
         }
         holder.productImage.setOnClickListener {
