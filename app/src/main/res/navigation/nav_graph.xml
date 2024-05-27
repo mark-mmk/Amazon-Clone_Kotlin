@@ -81,7 +81,7 @@
     <fragment
         android:id="@+id/productsDescription"
         android:name="com.example.amazon.ProductsDescription"
-        android:label="fragment_products_description"
+        android:label="Products description"
         tools:layout="@layout/fragment_products_description" >
         <argument
             app:argType="string"

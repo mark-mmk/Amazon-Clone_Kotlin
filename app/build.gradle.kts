@@ -75,5 +75,6 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation ("com.paypal.sdk:paypal-android-sdk:2.16.0")
 
 }
