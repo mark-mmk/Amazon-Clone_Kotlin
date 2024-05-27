@@ -104,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:hint="Type your Price"
+            android:hint="your Price"
             android:inputType="text"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
     </com.google.android.material.textfield.TextInputLayout>

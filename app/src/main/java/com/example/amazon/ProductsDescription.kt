@@ -37,6 +37,9 @@ class ProductsDescription : Fragment() {
                     response: Response<ProductsResponseArr>
                 ) {
                     if (response.isSuccessful && response.body()!!.size > 0) {
+                        binding.image.isVisible=true
+                        binding.liner.isVisible=true
+                        binding.progress.isVisible=false
                         productsArrayList.add(response.body()!![0])
                          Picasso.get()
                             .load(productsArrayList[0].image)

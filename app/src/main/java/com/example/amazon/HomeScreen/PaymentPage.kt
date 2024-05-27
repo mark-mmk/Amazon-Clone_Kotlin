@@ -94,7 +94,7 @@ class PaymentPage : Fragment() {
             var sendNotification = NotificationCompat.Builder(requireActivity(), "channel_one")
                 .setSmallIcon(android.R.drawable.ic_popup_reminder)
                 .setContentTitle("Amazon@gmail.com")
-                .setContentText("Our dear client ${binding.usernamePayment.text.toString()} , Phone Number ${binding.phonePayment.text.toString()}  successfully purchased by credit card Number ${binding.cardPayment.text.toString()}")
+                .setContentText("Our dear client ${binding.usernamePayment.text.toString()} successfully purchased by credit card Number ${binding.cardPayment.text.toString()}")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .build()
