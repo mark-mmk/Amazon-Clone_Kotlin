@@ -3,9 +3,6 @@ package com.example.amazon.dataBase
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -22,18 +19,18 @@ data class CartItem(
     var totalPrice: Double,
     var image: String?,
     var title: String?,
-    var date: Long,
+
 ) {
 
 
 
 
 
-    fun getFullDateString(): String {
-        val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
-        return format.format(Date(this.date))
-
-    }
+//    fun getFullDateString(): String {
+//        val format = SimpleDateFormat("MMM dd, yyyy", Locale.US)
+//        return format.format(Date(this.date))
+//
+//    }
 
 
     fun increaseQuantityOfProduct(productId: Int): CartItem {
@@ -56,30 +53,4 @@ data class CartItem(
 
 
 }
-
-
-
-/*   fun decreaseQuantityOfProduct(productId: Int): CartItem {
-       val product = products.find { it.productId == productId }
-       product?.quantity = product?.quantity?.minus(1) ?: 0
-       return this
-   }
-
-   fun increaseQuantityOfProduct(productId: Int): CartItem {
-       val product = products.find { it.productId == productId }
-       product?.quantity = product?.quantity?.plus(1) ?: 1
-       return this
-   }
-
-   fun getQuantityOfProduct(productId: Int): Int {
-       return products.find { it.productId == productId }?.quantity ?: 0
-   }
-
-   fun getIdsOfProducts(): List<Int> {
-       return products.map { it.productId }
-   }
-
-   fun getTotalPriceOfOneProduct(productId: Int, productPrice: Double): Double {
-       return (productPrice * getQuantityOfProduct(productId))
-   }*/
 

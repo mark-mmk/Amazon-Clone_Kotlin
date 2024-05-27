@@ -7,31 +7,24 @@ import androidx.room.RoomDatabase
 
 
 @Database(entities = [CartItem::class], version = 1)
-  abstract class AppDataBase : RoomDatabase() {
+abstract class AppDataBase : RoomDatabase() {
     abstract fun cartDao(): CartDao
-  object DatabaseBuilder {
-    @Volatile
-    private var INSTANCE: AppDataBase? = null
-    fun getInstance(context: Context): AppDataBase {
-      if (INSTANCE == null) {
-        synchronized(AppDataBase::class) {
-//                    INSTANCE = buildRoomDB(context)
-          INSTANCE = Room.databaseBuilder(
-            context.applicationContext,
-            AppDataBase::class.java,
-            "db_products"
-          ).allowMainThreadQueries().build()
+
+    object DatabaseBuilder {
+        @Volatile
+        private var INSTANCE: AppDataBase? = null
+        fun getInstance(context: Context): AppDataBase {
+            if (INSTANCE == null) {
+                synchronized(AppDataBase::class) {
+                    INSTANCE = Room.databaseBuilder(
+                        context.applicationContext,
+                        AppDataBase::class.java,
+                        "db_products"
+                    ).allowMainThreadQueries().build()
+                }
+            }
+            return INSTANCE!!
         }
-      }
-      return INSTANCE!!
     }
-//        private fun buildRoomDB(context: Context) =
-//            Room.databaseBuilder(
-//                context.applicationContext,
-//                DataBase::class.java,
-//                "tasks_database"
-//            ).build()
 
-  }
-
-  }
+}
