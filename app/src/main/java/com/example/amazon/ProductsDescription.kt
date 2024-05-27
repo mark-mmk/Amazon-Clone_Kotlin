@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import com.example.amazon.HomeScreen.AllProductsFragmentArgs
 import com.example.amazon.databinding.FragmentAllProductsBinding
@@ -24,47 +23,40 @@ class ProductsDescription : Fragment() {
     private var _binding: FragmentProductsDescriptionBinding? = null
     private val binding get() = _binding!!
     val args : ProductsDescriptionArgs by navArgs()
-    private val productsArrayList: ArrayList<ProductResponseItem> = arrayListOf()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val details =args.productId
+        val productId =args.productId
 
         RetrofitHelper.getInstance()
-            .getproductsById(details).enqueue(object : Callback<ProductsResponseArr> {
+            .getproductsById(productId.toString()).enqueue(object : Callback<ProductResponseItem> {
                 override fun onResponse(
-                    call: Call<ProductsResponseArr>,
-                    response: Response<ProductsResponseArr>
+                    call: Call<ProductResponseItem>,
+                    response: Response<ProductResponseItem>
                 ) {
-                    if (response.isSuccessful && response.body()!!.size > 0) {
-                        productsArrayList.add(response.body()!![0])
-                         Picasso.get()
-                            .load(productsArrayList[0].image)
+                    if (response.isSuccessful) {
+                        val product = response.body()!!
+                        Picasso.get()
+                            .load(product.image)
                             .placeholder(R.drawable.img_loading)
                             .into(binding.image)
-                        binding.title.text = productsArrayList[0].title
-                        binding.description.text = productsArrayList[0].description
-                        binding.rBar.rating = productsArrayList[0].rating.rate.toFloat()
-                        binding.rBar.isEnabled=false
-                        binding.price.text = productsArrayList[0].price.toString()
-                    } else {
-                        Toast.makeText(requireContext(), "No Data Found", Toast.LENGTH_LONG).show()
+                        binding.title.text = product.title
+                        binding.description.text = product.description
+                        binding.rBar.rating = product.rating.rate.toFloat()
+                        binding.price.text = product.price.toString()
                     }
                 }
-
-                override fun onFailure(call: Call<ProductsResponseArr>, t: Throwable) {
+                override fun onFailure(call: Call<ProductResponseItem>, t: Throwable) {
                     Toast.makeText(requireContext(), " Error: ${t.message}", Toast.LENGTH_LONG)
                         .show()
                 }
 
-            })
+                })
 
-    }
+            }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         _binding = FragmentProductsDescriptionBinding.inflate(inflater, container, false)
         return _binding!!.root    }
 
