@@ -23,28 +23,26 @@ class ProductsDescription : Fragment() {
     private var _binding: FragmentProductsDescriptionBinding? = null
     private val binding get() = _binding!!
     val args : ProductsDescriptionArgs by navArgs()
-    private val productsArrayList: ArrayList<ProductResponseItem> = arrayListOf()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val details =args.productId
+        val productId =args.productId
 
         RetrofitHelper.getInstance()
-            .getOneProductById(details.toInt()).enqueue(object : Callback<ProductResponseItem> {
+            .getOneProductById(productId).enqueue(object : Callback<ProductResponseItem> {
                 override fun onResponse(
                     call: Call<ProductResponseItem>,
                     response: Response<ProductResponseItem>
                 ) {
                     if (response.isSuccessful) {
-                        productsArrayList.add(response.body()!!)
+                        val product = response.body()!!
                         Picasso.get()
-                            .load(productsArrayList[0].image)
+                            .load(product.image)
                             .placeholder(R.drawable.img_loading)
                             .into(binding.image)
-                        binding.title.text = productsArrayList[0].title
-                        binding.description.text = productsArrayList[0].description
-                        binding.rBar.rating = productsArrayList[0].rating.rate.toFloat()
-                        binding.price.text = productsArrayList[0].price.toString()
+                        binding.title.text = product.title
+                        binding.description.text = product.description
+                        binding.rBar.rating = product.rating.rate.toFloat()
+                        binding.price.text = product.price.toString()
                     }
                 }
                 override fun onFailure(call: Call<ProductResponseItem>, t: Throwable) {
@@ -59,7 +57,6 @@ class ProductsDescription : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         _binding = FragmentProductsDescriptionBinding.inflate(inflater, container, false)
         return _binding!!.root    }
 

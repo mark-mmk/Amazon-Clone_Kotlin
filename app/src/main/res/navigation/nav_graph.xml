@@ -68,7 +68,10 @@
             app:argType="string"
             android:name="category_name"
           />
-  </fragment>
+        <action
+            android:id="@+id/action_allProductsFragment_to_productsDescription"
+            app:destination="@id/productsDescription" />
+    </fragment>
     <fragment
         android:id="@+id/paymentPage"
         android:name="com.example.amazon.HomeScreen.PaymentPage"
@@ -84,7 +87,7 @@
         android:label="Products description"
         tools:layout="@layout/fragment_products_description" >
         <argument
-            app:argType="string"
+            app:argType="integer"
             android:name="product_id"
             />
 

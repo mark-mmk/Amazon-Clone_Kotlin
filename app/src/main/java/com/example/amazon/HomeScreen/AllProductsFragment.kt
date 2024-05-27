@@ -25,9 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+
 
 
 class AllProductsFragment : Fragment() {
@@ -83,11 +81,12 @@ class AllProductsFragment : Fragment() {
                     if (response.isSuccessful && response.body()!!.size > 0) {
 
                         val products = response.body()!!
-                        val productAdapter = ProductsAdapter(products, requireContext())
+                        productAdapter = ProductsAdapter(products, requireContext())
                         productsRecyclerView.adapter = productAdapter
                         productsProgressBar.visibility = View.GONE
                         productsRecyclerView.visibility = View.VISIBLE
                         productsNoDataFound.visibility = View.GONE
+                        addClickListener()
                     } else {
                         Toast.makeText(requireContext(), "No Data Found", Toast.LENGTH_LONG).show()
                     }
@@ -147,18 +146,19 @@ class AllProductsFragment : Fragment() {
     private fun addClickListener() {
         productAdapter?.setOnItemClickListener(object : ProductsAdapter.ProductClickListener {
             override fun onCartClick(product: ProductResponseItem) {
+                Toast.makeText(requireContext(), "Added To Cart", Toast.LENGTH_LONG).show()
                 onImageAddToCartClick(product)
             }
 
             override fun onImageClick(product: ProductResponseItem) {
-                val action =
-                    HomePageDirections.actionHomePageToProductsDescription(product.id.toString())
+                val action =AllProductsFragmentDirections.actionAllProductsFragmentToProductsDescription(product.id)
                 findNavController().navigate(action)
             }
         })
     }
 
     private fun onImageAddToCartClick(product: ProductResponseItem) {
+        Toast.makeText(requireContext(), "Deleted From Cart ", Toast.LENGTH_LONG).show()
 
         if (userId != null) {
             if (isProductInCart(product.id)) {
