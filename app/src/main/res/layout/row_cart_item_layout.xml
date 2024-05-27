@@ -12,7 +12,7 @@
         android:id="@+id/RowCartProductImage"
         android:layout_width="@dimen/_100sdp"
         android:layout_height="@dimen/_100sdp"
-        android:contentDescription="image"
+        android:contentDescription="@string/image"
         android:src="@drawable/ic_launcher_background" />
 
     <TextView
@@ -30,9 +30,20 @@
         android:id="@+id/RowCartProductPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
         android:layout_below="@id/RowCartProductTitle"
         android:layout_alignStart="@id/RowCartProductTitle"
         android:text="@string/price"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+    <TextView
+        android:id="@+id/RowCartProductTotalPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_below="@id/RowCartProductPrice"
+        android:layout_alignStart="@id/RowCartProductPrice"
+        android:text="@string/cart_total_price_product"
         android:textColor="@color/black"
         android:textSize="15sp" />
 
@@ -43,6 +54,7 @@
         android:layout_below="@id/RowCartProductImage"
         android:layout_alignStart="@id/RowCartProductImage"
         android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/_10sdp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -65,7 +77,8 @@
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="15sp"
+                android:textStyle="bold"
                 tools:ignore="TouchTargetSizeCheck" />
 
 
@@ -76,7 +89,8 @@
                 android:layout_weight="1"
                 android:text="0"
                 android:textAlignment="center"
-                android:textSize="@dimen/_12sdp" />
+                android:textColor="@color/black"
+                android:textSize="15sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/RowCartProductBtnMines"
@@ -88,7 +102,8 @@
                 android:text="-"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="15sp"
+                android:textStyle="bold"
                 tools:ignore="TouchTargetSizeCheck" />
 
         </LinearLayout>
@@ -99,9 +114,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Remove"
+            android:text="@string/remove"
             android:textColor="@color/black"
-            android:textSize="@dimen/_11sdp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
 </RelativeLayout>

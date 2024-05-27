@@ -10,8 +10,6 @@ import androidx.room.Update
 @Dao
 interface CartDao {
 
-//    @Query("SELECT cart_user_id FROM cartTable WHERE cart_user_id = :user_id")
-//    fun (user_id: String):CartItem
 
     @Query("SELECT * FROM cartTable WHERE cart_user_id = :user_id")
     fun getCartItemsOfCurrentUserByUserId(user_id: String):List<CartItem>

@@ -1,9 +1,6 @@
 package com.example.amazon.HomeScreen
 
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.amazon.Adapter.CategoryAdapter
-import com.example.amazon.MainActivity
 import com.example.amazon.R
 import com.example.amazon.RetrofitHelper
 import com.example.amazon.dataBase.AppDataBase
@@ -31,6 +27,9 @@ import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var _binding: FragmentHomePageBinding? = null
@@ -46,7 +45,7 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var firebaseAuth: FirebaseAuth
     private var userId: String? = null
     private var db: AppDataBase? = null
-    private var productsIds: List<Int>?=null
+    private var productsIds: List<Int>? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.swiperefresh.setOnRefreshListener(this)
@@ -64,8 +63,10 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         categoriesRecyclerView = binding.HomeRecyclerCategory
         categoriesRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        if (userId != null) {
+            getProductsIdsOfCurrentUserById(userId)
 
-        getProductsIdsOfCurrentUserById(userId)
+        }
         getAllCategories()
         getLimitProducts()
 
@@ -124,6 +125,7 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             override fun onCartClick(product: ProductResponseItem) {
                 onImageAddToCartClick(product)
             }
+
             override fun onImageClick(product: ProductResponseItem) {
                 val action =
                     HomePageDirections.actionHomePageToProductsDescription(product.id.toString())
@@ -142,53 +144,36 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
 
-
-
-
     //add click listener to image to add to cart
     private fun onImageAddToCartClick(product: ProductResponseItem) {
 
-        if (userId!=null) {
-            if (isProductInCart(product.id)){
-                db!!.cartDao().deleteProductFromCart(userId!!,product.id)
-                Toast.makeText(requireContext(),"Deleted",Toast.LENGTH_LONG).show()
-            }else{
-                val currentProduct = db!!.cartDao().getProductById(product.id)
-                if (currentProduct!=null&&currentProduct.productId.toString().isNotEmpty()){
-                    db!!.cartDao().updateCartItem(
-                        CartItem(
-                            currentProduct.cartId, userId!!, currentProduct.productId,
-                            currentProduct.quantity+1, product.price,
-                            (product.price *( currentProduct.quantity+1)), product.image, product.title,
-                            2024
-                        )
-                    )
-                    Toast.makeText(requireContext(),"Updated",Toast.LENGTH_LONG).show()
+        if (userId != null) {
+            if (isProductInCart(product.id)) {
+                db!!.cartDao().deleteProductFromCart(userId!!, product.id)
+                Toast.makeText(requireContext(), "Deleted From Cart ", Toast.LENGTH_SHORT).show()
 
-                }
-                else{
+            } else {
+
                     db!!.cartDao().insertProductToCart(
                         CartItem(
                             0, userId!!, product.id, 1, product.price,
                             (product.price * 1), product.image, product.title,
-                            2024
                         )
                     )
-                    Toast.makeText(requireContext(),"Added To Cart",Toast.LENGTH_LONG).show()
-
+                    Toast.makeText(requireContext(), "Added To Cart", Toast.LENGTH_SHORT).show()
                 }
-            }
             updateProductsIds(userId!!)
         } else {
             Toast.makeText(
-                requireContext(), "Please Login First No User!!", Toast.LENGTH_LONG).show()
+                requireContext(), "Please Login First No User!!", Toast.LENGTH_LONG
+            ).show()
         }
 
     }
 
     private fun updateProductsIds(userId: String) {
-        productsIds=db!!.cartDao().getListOfProductsIdsOfCurrentUserById(userId)
-        productAdapter.productsIds=productsIds
+        productsIds = db!!.cartDao().getListOfProductsIdsOfCurrentUserById(userId)
+        productAdapter.productsIds = productsIds
     }
 
     private fun isProductInCart(productId: Int): Boolean {

@@ -18,5 +18,11 @@
     <string name="price">%s EGP</string>
     <string name="total">Total : %s</string>
     <string name="itemsInCart">SubTotal Items(%d)</string>
-    <string name="cart_price">%s EGP</string>
+    <string name="cart_price">price : %s EGP</string>
+    <string name="checkout_price"> %s EGP</string>
+    <string name="cart_total_price_product">total price : %s EGP</string>
+    <string name="total_price">Total Price</string>
+    <string name="checkout">Checkout</string>
+    <string name="image">image</string>
+    <string name="remove">Remove</string>
 </resources>
