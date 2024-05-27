@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import com.example.amazon.HomeScreen.AllProductsFragmentArgs
 import com.example.amazon.databinding.FragmentAllProductsBinding
@@ -36,6 +37,9 @@ class ProductsDescription : Fragment() {
                     response: Response<ProductResponseItem>
                 ) {
                     if (response.isSuccessful) {
+                        binding.image.isVisible=true
+                        binding.liner.isVisible=true
+                        binding.progress.isVisible=false
                         productsArrayList.add(response.body()!!)
                         Picasso.get()
                             .load(productsArrayList[0].image)
@@ -44,6 +48,7 @@ class ProductsDescription : Fragment() {
                         binding.title.text = productsArrayList[0].title
                         binding.description.text = productsArrayList[0].description
                         binding.rBar.rating = productsArrayList[0].rating.rate.toFloat()
+                        binding.rBar.isEnabled=false
                         binding.price.text = productsArrayList[0].price.toString()
                     }
                 }
