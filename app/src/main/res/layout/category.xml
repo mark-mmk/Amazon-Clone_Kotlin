@@ -9,16 +9,16 @@
     app:cardCornerRadius="30dp"
     app:cardElevation="20dp">
 
-        <TextView
-            android:id="@+id/text_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_5sdp"
-            android:layout_marginLeft="@dimen/_5sdp"
-            android:layout_gravity="center"
-            android:padding="@dimen/_5sdp"
-            android:text="Hello"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
+    <TextView
+        android:id="@+id/text_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_marginLeft="@dimen/_5sdp"
+        android:padding="@dimen/_5sdp"
+        android:text="Hello"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
 
 </androidx.cardview.widget.CardView>
