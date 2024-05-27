@@ -40,6 +40,15 @@ class ProductsAdapter(
     override fun getItemCount(): Int {
         return productsArrayList.size
     }
+    private fun displayIconCart(image : ImageView,productID:Int) {
+
+        if (productsIds?.contains(productID) == true) {
+            image.setImageResource(R.drawable.ic_in_cart)
+        } else {
+            image.setImageResource(R.drawable.ic_add_to_cart)
+        }
+
+    }
 
     override fun onBindViewHolder(holder: ProductsViewHolder, position: Int) {
         val product = productsArrayList[position]
@@ -51,18 +60,17 @@ class ProductsAdapter(
             .load(product.image)
             .placeholder(R.drawable.img_loading)
             .into(holder.productImage)
-        if (productsIds?.contains(product.id) == true) {
-            holder.imageAddToCart.setImageResource(R.drawable.ic_in_cart)
-        } else {
-            holder.imageAddToCart.setImageResource(R.drawable.ic_add_to_cart)
-        }
+
+        displayIconCart(holder.imageAddToCart,product.id)
 
         holder.imageAddToCart.setOnClickListener {
             clickListener?.onCartClick(product)
             holder.imageAddToCart.setImageResource(R.drawable.ic_in_cart)
+            displayIconCart(holder.imageAddToCart,product.id)
         }
         holder.productImage.setOnClickListener {
             clickListener?.onImageClick(product)
+            displayIconCart(holder.imageAddToCart,product.id)
         }
 
     }
