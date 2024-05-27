@@ -125,6 +125,8 @@ class BuyPage : Fragment() {
                 getProductsOfCurrentUserById()
                 cartAdapter?.list = productsInCart!!
                 cartAdapter?.notifyItemRemoved(position)
+                cartAdapter?.notifyItemRangeChanged(position, productsInCart!!.size)
+                cartAdapter?.notifyDataSetChanged()
                 calculateTotalPrice()
                 if (productsInCart!!.size == 0) {
                         binding.TotalItems.text = resources.getString(R.string.itemsInCart, 0)

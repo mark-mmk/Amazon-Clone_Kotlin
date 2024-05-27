@@ -3,6 +3,7 @@ package com.example.amazon.products
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.amazon.R
 import com.example.amazon.databinding.RowProductLayoutBinding
