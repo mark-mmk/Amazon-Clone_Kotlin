@@ -23,7 +23,9 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.navigation.fragment.navArgs
 import com.example.amazon.MainActivity
+import com.example.amazon.ProductsDescriptionArgs
 import com.example.amazon.databinding.FragmentPaymentPageBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -41,6 +43,7 @@ class PaymentPage : Fragment() {
     private val binding get() = _binding!!
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
+    val args : PaymentPageArgs by navArgs()
     private val config = PayPalConfiguration()
         .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
         .clientId("AW1TdvpSGbIM5iP4HJNI5TyTmwpY9Gv9dYw8_8yW5lYIbCqf326vrkrp0ce9TAqjEGMHiV3OqJM_aRT0")
@@ -66,6 +69,9 @@ class PaymentPage : Fragment() {
         }.addOnFailureListener {
             Log.w(ContentValues.TAG, "Error getting documents: ", it)
         }
+        val price =args.price
+        binding.pricePayment.setText(price)
+
         binding.buy.setOnClickListener {
             val channel = NotificationChannel(
                 "channel_one",

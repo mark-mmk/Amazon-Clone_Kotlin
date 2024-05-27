@@ -15,8 +15,8 @@
     <string name="profile_phone">Phone : %$</string>
     <string name="no_data_found">No Data Found</string>
     <string name="show_more"><![CDATA[See More >>]]></string>
-    <string name="price">%s EGP</string>
+    <string name="price">%s $</string>
     <string name="total">Total : %s</string>
     <string name="itemsInCart">SubTotal Items(%d)</string>
-    <string name="cart_price">%s EGP</string>
+    <string name="cart_price">%s $</string>
 </resources>
