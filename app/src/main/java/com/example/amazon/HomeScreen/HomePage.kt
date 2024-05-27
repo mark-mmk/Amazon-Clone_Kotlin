@@ -1,9 +1,6 @@
 package com.example.amazon.HomeScreen
 
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,24 +12,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.amazon.Adapter.CategoryAdapter
-import com.example.amazon.MainActivity
 import com.example.amazon.R
 import com.example.amazon.RetrofitHelper
-import com.example.amazon.dataBase.AppDataBase
-import com.example.amazon.dataBase.CartItem
 
 import com.example.amazon.databinding.FragmentHomePageBinding
-import com.example.amazon.products.ProductResponseItem
 import com.example.amazon.products.ProductsAdapter
 import com.example.amazon.products.ProductsResponseArr
-import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class HomePage : Fragment(){
     private var _binding: FragmentHomePageBinding? = null
     private val binding get() = _binding!!
     private lateinit var categoriesRecyclerView: RecyclerView
@@ -42,20 +33,13 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var productsNoDataFound: ImageView
     private lateinit var categories: ArrayList<String>
     private lateinit var categoryAdapter: CategoryAdapter
-    private lateinit var productAdapter: ProductsAdapter
-    private lateinit var firebaseAuth: FirebaseAuth
-    private var userId: String? = null
-    private var db: AppDataBase? = null
-    private var productsIds: List<Int>?=null
+    private lateinit var productsAdapter: ProductsAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.swiperefresh.setOnRefreshListener(this)
         productsProgressBar = view.findViewById(R.id.ProductsProgressBar)
         productsNoDataFound = view.findViewById(R.id.ProductsNoDataFoundImg)
         productsRecyclerView = view.findViewById(R.id.ProductsRecyclerView)
-        firebaseAuth = FirebaseAuth.getInstance()
-        userId = firebaseAuth.currentUser?.uid
-        db = AppDataBase.DatabaseBuilder.getInstance(requireContext())
         productsRecyclerView.layoutManager =
             GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
 
@@ -65,10 +49,8 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         categoriesRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
-        getProductsIdsOfCurrentUserById(userId)
         getAllCategories()
         getLimitProducts()
-
         binding.HomeProductsSeeMoreTV.setOnClickListener {
             navigationToProducts("products")
         }
@@ -76,10 +58,11 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     }
 
-    private fun navigationToProducts(categoryName: String) {
+    private fun navigationToProducts(categoryName: String ) {
         val action = HomePageDirections.actionHomePageToAllProductsFragment(categoryName)
         findNavController().navigate(action)
     }
+
 
 
     private fun getLimitProducts(limit: Int = 8) {
@@ -95,8 +78,7 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     if (response.isSuccessful && response.body()!!.size > 0) {
 
                         val products = response.body()!!
-                        productAdapter = ProductsAdapter(products, requireContext(),productsIds)
-                        addClickListener()
+                        val productAdapter = ProductsAdapter(products, requireContext())
                         productsRecyclerView.adapter = productAdapter
                         productsProgressBar.visibility = View.GONE
                         productsRecyclerView.visibility = View.VISIBLE
@@ -118,6 +100,7 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             })
     }
+
 
     private fun addClickListener() {
         productAdapter.setOnItemClickListener(object : ProductsAdapter.ProductClickListener {
@@ -230,25 +213,14 @@ class HomePage : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             })
     }
-
     private fun categoryClick() {
         categoryAdapter.setOnCategoryClickListener(
-            object : CategoryAdapter.CategoryClickListener {
+            object :CategoryAdapter.CategoryClickListener{
                 override fun onCategoryClick(categoryName: String) {
                     navigationToProducts(categoryName)
                 }
 
             })
-    }
-
-    override fun onRefresh() {
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            var i = Intent(requireActivity(), MainActivity::class.java)
-//            startActivity(i)
-//            Toast.makeText(requireActivity(), "Refresh", Toast.LENGTH_LONG).show()
-//            binding.swiperefresh.isRefreshing = false
-//        }, 2000)
-        binding.swiperefresh.isRefreshing = false
     }
 
     override fun onCreateView(

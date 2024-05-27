@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.amazon.LoginScreen.LoginPageScreen
 import com.example.amazon.R
 import com.example.amazon.databinding.FragmentProfileBinding
@@ -93,7 +94,6 @@ class ProfileFragment : Fragment() {
             }
             Dialog.show()
         }
-
         binding.logout.setOnClickListener {
             firebaseAuth.signOut()
             val intent = Intent(
@@ -124,7 +124,7 @@ class ProfileFragment : Fragment() {
                 myEdit.apply()
                 Toast.makeText(requireActivity(), "Done", Toast.LENGTH_LONG).show()
             }
-            if (requestCode ==100){
+            if (requestCode == 100) {
                 binding.profileImage.setImageURI(data?.data)
 
 
