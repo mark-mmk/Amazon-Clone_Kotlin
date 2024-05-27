@@ -40,6 +40,7 @@ class ProductsAdapter(
     override fun getItemCount(): Int {
         return productsArrayList.size
     }
+
 private fun displayIconCart(image : ImageView,productID:Int) {
 
     if (productsIds?.contains(productID) == true) {
@@ -59,16 +60,18 @@ private fun displayIconCart(image : ImageView,productID:Int) {
             .load(product.image)
             .placeholder(R.drawable.img_loading)
             .into(holder.productImage)
+
         displayIconCart(holder.imageAddToCart,product.id)
 
         holder.imageAddToCart.setOnClickListener {
             clickListener?.onCartClick(product)
+            
+            holder.imageAddToCart.setImageResource(R.drawable.ic_in_cart)
+
             displayIconCart(holder.imageAddToCart,product.id)
         }
         holder.productImage.setOnClickListener {
             clickListener?.onImageClick(product)
-            displayIconCart(holder.imageAddToCart,product.id)
-
         }
 
     }
