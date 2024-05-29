@@ -65,11 +65,12 @@ class ProductsAdapter(
 
         holder.imageAddToCart.setOnClickListener {
             clickListener?.onCartClick(product)
-            holder.imageAddToCart.setImageResource(R.drawable.ic_in_cart)
+
             displayIconCart(holder.imageAddToCart,product.id)
         }
         holder.productImage.setOnClickListener {
             clickListener?.onImageClick(product)
+            displayIconCart(holder.imageAddToCart,product.id)
         }
 
     }

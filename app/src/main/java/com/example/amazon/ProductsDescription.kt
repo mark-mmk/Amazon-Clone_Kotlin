@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import com.example.amazon.HomeScreen.AllProductsFragmentArgs
 import com.example.amazon.databinding.FragmentAllProductsBinding
@@ -34,6 +35,9 @@ class ProductsDescription : Fragment() {
                     response: Response<ProductResponseItem>
                 ) {
                     if (response.isSuccessful) {
+                        binding.image.isVisible=true
+                        binding.liner.isVisible=true
+                        binding.progress.isVisible=false
                         val product = response.body()!!
                         Picasso.get()
                             .load(product.image)
