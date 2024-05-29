@@ -1,5 +1,6 @@
 package com.example.amazon
 
+import com.example.amazon.products.ProductResponseItem
 import com.example.amazon.products.ProductsResponseArr
 import retrofit2.Call
 import retrofit2.http.Body
@@ -21,7 +22,7 @@ interface ApiInterface {
     @GET("products/category/{categoryName}")
     fun  getSingleCategory(@Path("categoryName") categoryName: String): Call<ProductsResponseArr>
     @GET("products")
-    fun getproductsById(@Query("id") id: String):Call<ProductsResponseArr>
+    fun getproductsById(@Query("id") id: String):Call<ProductResponseItem>
 
 //    @GET("user")
 //    fun getUser(): Call<UserResponse>
