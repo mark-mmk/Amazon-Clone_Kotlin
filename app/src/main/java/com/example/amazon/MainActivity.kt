@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         drawerLayout=binding.drawerLayout
         showDrawer()
         binding.bottomnavigation.menu.getItem(2).setOnMenuItemClickListener {
-            Toast.makeText(this@MainActivity, "Coming Soon", Toast.LENGTH_SHORT).show()
             drawerLayout.openDrawer(binding.navView)
             true}
 

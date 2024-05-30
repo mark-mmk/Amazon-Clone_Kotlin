@@ -27,7 +27,6 @@ class ProductsDescription : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val productId =args.productId
-Toast.makeText(requireContext(),"productId=${productId}",Toast.LENGTH_LONG).show()
         RetrofitHelper.getInstance()
             .getProductById(productId).enqueue(object : Callback<ProductResponseItem> {
                 override fun onResponse(
@@ -60,7 +59,7 @@ Toast.makeText(requireContext(),"productId=${productId}",Toast.LENGTH_LONG).show
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentProductsDescriptionBinding.inflate(inflater, container, false)
         return _binding!!.root    }
 

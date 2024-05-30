@@ -129,7 +129,6 @@ class HomePage : Fragment() {
                 val action =
                     HomePageDirections.actionHomePageToProductsDescription(product.id)
                 findNavController().navigate(action)
-                Toast.makeText(requireContext(),"Product Description",Toast.LENGTH_LONG).show()
             }
         })
     }
