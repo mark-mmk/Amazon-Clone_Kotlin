@@ -15,17 +15,13 @@ interface ApiInterface {
 
     @GET("products")
     fun getAllProducts(): Call<ProductsResponseArr>
-
     @GET("products")
     fun getLimitProducts(@Query("limit") limit: Int): Call<ProductsResponseArr>
-
-    @GET("products/{id}")
-    fun getOneProductById(@Path("id") id: Int): Call<ProductResponseItem>
-
     @GET("products/categories")
     fun getAllCategories(): Call<ArrayList<String>>
-
     @GET("products/category/{categoryName}")
-    fun getSingleCategory(@Path("categoryName") categoryName: String): Call<ProductsResponseArr>
+    fun  getSingleCategory(@Path("categoryName") categoryName: String): Call<ProductsResponseArr>
+    @GET("products/{id}")
+    fun getProductById(@Path("id") id: Int):Call<ProductResponseItem>
 
 }

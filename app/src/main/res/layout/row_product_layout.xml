@@ -4,10 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    app:cardElevation="10dp"
     app:cardBackgroundColor="@android:color/white"
     app:cardCornerRadius="10dp"
-    >
+    app:cardElevation="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,20 +30,21 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="title"
-            android:textSize="15sp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/RowProductPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/price"
-            android:textSize="15sp"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
+
             <RatingBar
                 android:id="@+id/RowProductRatingBar"
                 style="?android:attr/ratingBarStyleSmall"
@@ -55,17 +55,17 @@
                 android:rating="5"
                 android:stepSize=".1"
                 android:theme="@style/CustomRatingBar" />
+
             <ImageView
                 android:id="@+id/RowProductAddToCart"
                 android:layout_width="@dimen/_25sdp"
                 android:layout_height="@dimen/_25sdp"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_add_to_cart"
                 android:contentDescription="Add to cart"
+                android:src="@drawable/ic_add_to_cart"
 
                 />
         </RelativeLayout>
-
 
 
     </LinearLayout>

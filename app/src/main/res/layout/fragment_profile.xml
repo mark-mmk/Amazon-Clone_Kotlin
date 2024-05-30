@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     android:padding="@dimen/_10sdp"
     tools:context=".HomeScreen.ProfileFragment">
 
@@ -94,7 +95,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
-        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="12dp"
         android:text="Account Information :"
         android:textSize="@dimen/_20sdp"
@@ -109,14 +110,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_20sdp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="92dp"
         android:background="#1E2C88"
         android:text="Log out"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

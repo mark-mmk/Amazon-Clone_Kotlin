@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/_5sdp"
+    android:background="@color/white"
     tools:context=".HomeScreen.PaymentPage">
 
 
@@ -104,7 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:hint="Type your Price"
+            android:hint="your Price"
             android:inputType="text"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -165,8 +166,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
