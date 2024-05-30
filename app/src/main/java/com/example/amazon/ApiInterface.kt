@@ -21,8 +21,8 @@ interface ApiInterface {
     fun getAllCategories(): Call<ArrayList<String>>
     @GET("products/category/{categoryName}")
     fun  getSingleCategory(@Path("categoryName") categoryName: String): Call<ProductsResponseArr>
-    @GET("products")
-    fun getproductsById(@Query("id") id: String):Call<ProductResponseItem>
+    @GET("products/{id}")
+    fun getProductById(@Path("id") id: Int):Call<ProductResponseItem>
 
 //    @GET("user")
 //    fun getUser(): Call<UserResponse>
