@@ -110,6 +110,12 @@ class ProfileFragment : Fragment() {
                 LoginPageScreen::class.java
             )
             startActivity(intent)
+
+            val shared = requireContext().getSharedPreferences(
+                "MySharedPref",
+                AppCompatActivity.MODE_PRIVATE
+            )
+            shared.edit().remove("user").commit()
         }
     }
 
