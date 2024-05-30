@@ -99,7 +99,7 @@ class ProfileFragment : Fragment() {
             }
             negativeButton.setOnClickListener {
                 Dialog.dismiss()
-                Toast.makeText(requireActivity(), "Back", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(requireActivity(), "Back", Toast.LENGTH_SHORT).show()
             }
             Dialog.show()
         }

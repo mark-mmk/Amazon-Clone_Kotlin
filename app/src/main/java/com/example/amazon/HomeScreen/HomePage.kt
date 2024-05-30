@@ -127,9 +127,9 @@ class HomePage : Fragment() {
 
             override fun onImageClick(product: ProductResponseItem) {
                 val action =
-                    HomePageDirections.actionHomePageToProductsDescription(product.id.toString())
+                    HomePageDirections.actionHomePageToProductsDescription(product.id)
                 findNavController().navigate(action)
-                Toast.makeText(requireContext(),"Product Description",Toast.LENGTH_LONG).show()
+//                Toast.makeText(requireContext(),"Product Description",Toast.LENGTH_LONG).show()
             }
         })
     }

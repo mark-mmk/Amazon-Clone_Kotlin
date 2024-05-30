@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/_535sdp"
     android:orientation="vertical"
+    android:background="@color/white"
     android:paddingBottom="@dimen/_50sdp"
     tools:context=".HomeScreen.BuyPage">
 

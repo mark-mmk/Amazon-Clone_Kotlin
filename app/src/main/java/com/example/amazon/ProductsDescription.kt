@@ -23,39 +23,35 @@ import retrofit2.Response
 class ProductsDescription : Fragment() {
     private var _binding: FragmentProductsDescriptionBinding? = null
     private val binding get() = _binding!!
-    val args : ProductsDescriptionArgs by navArgs()
-    private val productsArrayList: ArrayList<ProductResponseItem> = arrayListOf()
-
+    private val args: ProductsDescriptionArgs by navArgs()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val details =args.productId
-
+        val productId = args.productId
+//        Toast.makeText(requireContext(), "productId=${productId}", Toast.LENGTH_LONG).show()
         RetrofitHelper.getInstance()
-            .getproductsById(details).enqueue(object : Callback<ProductsResponseArr> {
+            .getProductById(productId).enqueue(object : Callback<ProductResponseItem> {
                 override fun onResponse(
-                    call: Call<ProductsResponseArr>,
-                    response: Response<ProductsResponseArr>
+                    call: Call<ProductResponseItem>,
+                    response: Response<ProductResponseItem>
                 ) {
-                    if (response.isSuccessful && response.body()!!.size > 0) {
-                        binding.image.isVisible=true
-                        binding.liner.isVisible=true
-                        binding.progress.isVisible=false
-                        productsArrayList.add(response.body()!![0])
-                         Picasso.get()
-                            .load(productsArrayList[0].image)
+                    if (response.isSuccessful) {
+                        binding.image.isVisible = true
+                        binding.liner.isVisible = true
+                        binding.progress.isVisible = false
+                        val product = response.body()!!
+                        Picasso.get()
+                            .load(product.image)
                             .placeholder(R.drawable.img_loading)
                             .into(binding.image)
-                        binding.title.text = productsArrayList[0].title
-                        binding.description.text = productsArrayList[0].description
-                        binding.rBar.rating = productsArrayList[0].rating.rate.toFloat()
+                        binding.title.text = product.title
+                        binding.description.text = product.description
+                        binding.rBar.rating = product.rating.rate.toFloat()
                         binding.rBar.isEnabled=false
-                        binding.price.text = productsArrayList[0].price.toString()
-                    } else {
-                        Toast.makeText(requireContext(), "No Data Found", Toast.LENGTH_LONG).show()
+                        binding.price.text = product.price.toString()
                     }
                 }
 
-                override fun onFailure(call: Call<ProductsResponseArr>, t: Throwable) {
+                override fun onFailure(call: Call<ProductResponseItem>, t: Throwable) {
                     Toast.makeText(requireContext(), " Error: ${t.message}", Toast.LENGTH_LONG)
                         .show()
                 }
@@ -63,12 +59,13 @@ class ProductsDescription : Fragment() {
             })
 
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         _binding = FragmentProductsDescriptionBinding.inflate(inflater, container, false)
-        return _binding!!.root    }
+        return _binding!!.root
+    }
 
 }
