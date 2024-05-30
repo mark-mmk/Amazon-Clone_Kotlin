@@ -43,6 +43,8 @@ class ProductsDescription : Fragment() {
                         binding.description.text = product.description
                         binding.rBar.rating = product.rating.rate.toFloat()
                         binding.price.text = product.price.toString()
+                    } else {
+                        Toast.makeText(requireContext(), "No Data Found", Toast.LENGTH_LONG).show()
                     }
                 }
                 override fun onFailure(call: Call<ProductResponseItem>, t: Throwable) {

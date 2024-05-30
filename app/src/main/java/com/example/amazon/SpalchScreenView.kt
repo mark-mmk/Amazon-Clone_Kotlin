@@ -15,6 +15,6 @@ class SpalchScreenView : AppCompatActivity() {
             val intent = Intent(this, LoginPageScreen::class.java)
             startActivity(intent)
             finish()
-        }, 1500)
+        }, 2000)
     }
 }

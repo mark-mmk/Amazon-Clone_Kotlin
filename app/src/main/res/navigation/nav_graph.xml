@@ -80,6 +80,10 @@
         <action
             android:id="@+id/action_paymentPage_to_buyPage"
             app:destination="@id/buyPage" />
+        <argument
+            app:argType="string"
+            android:name="price"
+            />
     </fragment>
     <fragment
         android:id="@+id/productsDescription"

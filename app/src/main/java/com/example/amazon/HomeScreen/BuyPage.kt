@@ -64,7 +64,8 @@ class BuyPage : Fragment() {
 
 
         binding.checkout.setOnClickListener {
-            findNavController().navigate(R.id.action_buyPage_to_paymentPage)
+            val action = BuyPageDirections.actionBuyPageToPaymentPage(price = binding.BuyLastTotalPrice.text.toString())
+            findNavController().navigate(action)
         }
 
 
