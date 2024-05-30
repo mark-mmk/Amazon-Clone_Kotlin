@@ -18,6 +18,11 @@ class RegisterPageScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterPageScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val shared = getSharedPreferences(
+            "MySharedPref",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        shared.edit().remove("user").commit()
         firebaseAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         binding.cancel.setOnClickListener {
