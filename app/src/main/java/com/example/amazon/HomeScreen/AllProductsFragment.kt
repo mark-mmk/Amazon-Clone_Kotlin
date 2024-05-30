@@ -30,6 +30,7 @@ import retrofit2.Response
 
 class AllProductsFragment : Fragment() {
     private var _binding: FragmentAllProductsBinding? = null
+    private val binding get() = _binding!!
     private lateinit var productsRecyclerView: RecyclerView
     private lateinit var productsProgressBar: ProgressBar
     private lateinit var productsNoDataFound: ImageView
@@ -43,7 +44,7 @@ class AllProductsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAllProductsBinding.inflate(inflater, container, false)
-        return _binding!!.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
