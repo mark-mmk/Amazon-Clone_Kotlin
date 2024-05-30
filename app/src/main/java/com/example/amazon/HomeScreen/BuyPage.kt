@@ -96,8 +96,8 @@ class BuyPage : Fragment() {
             cartProductProgressBar.visibility = View.GONE
             cartProductRecyclerView.visibility = View.GONE
             cartProductNoDataFound.visibility = View.VISIBLE
-            Toast.makeText(requireContext(), "The Your Cart is Empty ", Toast.LENGTH_LONG)
-                .show()
+//            Toast.makeText(requireContext(), "The Your Cart is Empty ", Toast.LENGTH_LONG)
+//                .show()
         }
     }
 

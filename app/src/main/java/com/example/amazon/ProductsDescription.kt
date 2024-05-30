@@ -23,11 +23,11 @@ import retrofit2.Response
 class ProductsDescription : Fragment() {
     private var _binding: FragmentProductsDescriptionBinding? = null
     private val binding get() = _binding!!
-    private val args : ProductsDescriptionArgs by navArgs()
+    private val args: ProductsDescriptionArgs by navArgs()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val productId =args.productId
-Toast.makeText(requireContext(),"productId=${productId}",Toast.LENGTH_LONG).show()
+        val productId = args.productId
+//        Toast.makeText(requireContext(), "productId=${productId}", Toast.LENGTH_LONG).show()
         RetrofitHelper.getInstance()
             .getProductById(productId).enqueue(object : Callback<ProductResponseItem> {
                 override fun onResponse(
@@ -35,9 +35,9 @@ Toast.makeText(requireContext(),"productId=${productId}",Toast.LENGTH_LONG).show
                     response: Response<ProductResponseItem>
                 ) {
                     if (response.isSuccessful) {
-                        binding.image.isVisible=true
-                        binding.liner.isVisible=true
-                        binding.progress.isVisible=false
+                        binding.image.isVisible = true
+                        binding.liner.isVisible = true
+                        binding.progress.isVisible = false
                         val product = response.body()!!
                         Picasso.get()
                             .load(product.image)
@@ -46,22 +46,26 @@ Toast.makeText(requireContext(),"productId=${productId}",Toast.LENGTH_LONG).show
                         binding.title.text = product.title
                         binding.description.text = product.description
                         binding.rBar.rating = product.rating.rate.toFloat()
+                        binding.rBar.isEnabled=false
                         binding.price.text = product.price.toString()
                     }
                 }
+
                 override fun onFailure(call: Call<ProductResponseItem>, t: Throwable) {
                     Toast.makeText(requireContext(), " Error: ${t.message}", Toast.LENGTH_LONG)
                         .show()
                 }
 
-                })
+            })
 
-            }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentProductsDescriptionBinding.inflate(inflater, container, false)
-        return _binding!!.root    }
+        return _binding!!.root
+    }
 
 }

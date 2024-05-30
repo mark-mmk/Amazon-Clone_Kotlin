@@ -94,6 +94,9 @@
             app:argType="integer"
             android:name="product_id"
             />
+        <action
+            android:id="@+id/action_productsDescription_to_homePage"
+            app:destination="@id/homePage" />
 
     </fragment>
 
