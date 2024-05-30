@@ -23,13 +23,13 @@ import retrofit2.Response
 class ProductsDescription : Fragment() {
     private var _binding: FragmentProductsDescriptionBinding? = null
     private val binding get() = _binding!!
-    val args : ProductsDescriptionArgs by navArgs()
+    private val args : ProductsDescriptionArgs by navArgs()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val productId =args.productId
-
+Toast.makeText(requireContext(),"productId=${productId}",Toast.LENGTH_LONG).show()
         RetrofitHelper.getInstance()
-            .getproductsById(productId.toString()).enqueue(object : Callback<ProductResponseItem> {
+            .getProductById(productId).enqueue(object : Callback<ProductResponseItem> {
                 override fun onResponse(
                     call: Call<ProductResponseItem>,
                     response: Response<ProductResponseItem>
