@@ -1,5 +1,6 @@
 package com.example.amazon.HomeScreen
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.amazon.R
 import com.example.amazon.RetrofitHelper
+import com.example.amazon.SecondActivity
 import com.example.amazon.dataBase.AppDataBase
 import com.example.amazon.dataBase.CartItem
 import com.example.amazon.databinding.FragmentAllProductsBinding
@@ -36,7 +38,7 @@ class AllProductsFragment : Fragment() {
     private var userId: String? = null
     private var db: AppDataBase? = null
     private var productsIds: List<Int>? = null
-    private val args: AllProductsFragmentArgs by navArgs()
+//    private val args: AllProductsFragmentArgs by navArgs()
     private var productAdapter: ProductsAdapter? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,15 +58,18 @@ class AllProductsFragment : Fragment() {
         productsRecyclerView.layoutManager =
             GridLayoutManager(requireContext(), 2, RecyclerView.VERTICAL, false)
 
-        val categoryName = args.categoryName
+//        val categoryName = args.categoryName
+        val categoryName = arguments?.getString("category_name")
         if (categoryName == "products") {
             getAllProducts()
 
         } else {
-            getAllProductsByCategoryName(categoryName)
+            if (categoryName != null) {
+                getAllProductsByCategoryName(categoryName)
+            }
         }
         //chang title of tool bar
-        (requireActivity() as AppCompatActivity).supportActionBar?.title = categoryName.uppercase()
+        (requireActivity() as AppCompatActivity).supportActionBar?.title = categoryName?.uppercase()
     }
 
 
@@ -146,19 +151,20 @@ class AllProductsFragment : Fragment() {
     private fun addClickListener() {
         productAdapter?.setOnItemClickListener(object : ProductsAdapter.ProductClickListener {
             override fun onCartClick(product: ProductResponseItem) {
-                Toast.makeText(requireContext(), "Added To Cart", Toast.LENGTH_LONG).show()
                 onImageAddToCartClick(product)
             }
 
             override fun onImageClick(product: ProductResponseItem) {
-                val action =AllProductsFragmentDirections.actionAllProductsFragmentToProductsDescription(product.id)
-                findNavController().navigate(action)
+//                val action =AllProductsFragmentDirections.actionAllProductsFragmentToProductsDescription(product.id)
+//                findNavController().navigate(action)
+                val i = Intent(requireContext(), SecondActivity::class.java)
+                i.putExtra("product_id",product.id)
+                startActivity(i)
             }
         })
     }
 
     private fun onImageAddToCartClick(product: ProductResponseItem) {
-        Toast.makeText(requireContext(), "Deleted From Cart ", Toast.LENGTH_LONG).show()
 
         if (userId != null) {
             if (isProductInCart(product.id)) {

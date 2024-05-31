@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import com.example.amazon.databinding.FragmentProductsDescriptionBinding
@@ -18,11 +19,13 @@ import retrofit2.Response
 class ProductsDescription : Fragment() {
     private var _binding: FragmentProductsDescriptionBinding? = null
     private val binding get() = _binding!!
-    private val args: ProductsDescriptionArgs by navArgs()
+//    private val args: ProductsDescriptionArgs by navArgs()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val productId = args.productId
+//        val productId = args.productId
+        val productId =arguments?.getInt("product_id")
 
+    if (productId != null) {
         RetrofitHelper.getInstance()
             .getProductById(productId).enqueue(object : Callback<ProductResponseItem> {
                 override fun onResponse(
@@ -43,6 +46,8 @@ class ProductsDescription : Fragment() {
                         binding.rBar.rating = product.rating.rate.toFloat()
                         binding.rBar.isEnabled=false
                         binding.price.text = product.price.toString()
+                        (requireActivity() as AppCompatActivity).supportActionBar?.title = product.category.uppercase()
+
                     } else {
                         Toast.makeText(requireContext(), "No Data Found", Toast.LENGTH_LONG).show()
                     }
@@ -53,7 +58,8 @@ class ProductsDescription : Fragment() {
                         .show()
                 }
 
-                })
+            })
+    }
 
     }
 

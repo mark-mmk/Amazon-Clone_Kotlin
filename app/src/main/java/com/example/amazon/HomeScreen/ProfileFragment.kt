@@ -190,7 +190,7 @@ class ProfileFragment : Fragment() {
             val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
             binding.profileImage.setImageBitmap(bitmap)
         }.addOnFailureListener { exception ->
-            Toast.makeText(requireActivity(), "Error", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireActivity(), exception.message, Toast.LENGTH_LONG).show()
         }
     }
 }
