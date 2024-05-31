@@ -107,6 +107,7 @@ class LoginPageScreen : AppCompatActivity() {
         if (firebaseAuth.currentUser != null && email != null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }
