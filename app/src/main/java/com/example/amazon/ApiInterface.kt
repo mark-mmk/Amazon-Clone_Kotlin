@@ -24,5 +24,4 @@ interface ApiInterface {
     @GET("products/{id}")
     fun getProductById(@Path("id") id: Int):Call<ProductResponseItem>
 
-
 }
