@@ -21,6 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.amazon.LoginScreen.LoginPageScreen
@@ -196,7 +197,8 @@ class ProfileFragment : Fragment() {
             val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
             binding.profileImage.setImageBitmap(bitmap)
         }.addOnFailureListener { exception ->
-            Toast.makeText(requireActivity(), "Error", Toast.LENGTH_LONG).show()
+//            Toast.makeText(requireActivity(), "Error", Toast.LENGTH_LONG).show()
+        binding.profileImage.setImageResource(R.drawable.personal)
         }
     }
 }

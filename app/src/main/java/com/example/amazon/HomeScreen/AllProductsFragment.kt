@@ -146,7 +146,7 @@ class AllProductsFragment : Fragment() {
     private fun addClickListener() {
         productAdapter?.setOnItemClickListener(object : ProductsAdapter.ProductClickListener {
             override fun onCartClick(product: ProductResponseItem) {
-                Toast.makeText(requireContext(), "Added To Cart", Toast.LENGTH_LONG).show()
+//                Toast.makeText(requireContext(), "Added To Cart", Toast.LENGTH_LONG).show()
                 onImageAddToCartClick(product)
             }
 
@@ -158,8 +158,7 @@ class AllProductsFragment : Fragment() {
     }
 
     private fun onImageAddToCartClick(product: ProductResponseItem) {
-        Toast.makeText(requireContext(), "Deleted From Cart ", Toast.LENGTH_LONG).show()
-
+//        Toast.makeText(requireContext(), "Deleted From Cart ", Toast.LENGTH_LONG).show()
         if (userId != null) {
             if (isProductInCart(product.id)) {
                 db!!.cartDao().deleteProductFromCart(userId!!, product.id)
