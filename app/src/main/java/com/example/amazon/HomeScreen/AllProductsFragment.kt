@@ -166,7 +166,6 @@ class AllProductsFragment : Fragment() {
     }
 
     private fun onImageAddToCartClick(product: ProductResponseItem) {
-
         if (userId != null) {
             if (isProductInCart(product.id)) {
                 db!!.cartDao().deleteProductFromCart(userId!!, product.id)

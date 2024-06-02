@@ -21,6 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.amazon.LoginScreen.LoginPageScreen
@@ -99,7 +100,6 @@ class ProfileFragment : Fragment() {
             }
             negativeButton.setOnClickListener {
                 Dialog.dismiss()
-//                Toast.makeText(requireActivity(), "Back", Toast.LENGTH_SHORT).show()
             }
             Dialog.show()
         }
@@ -124,7 +124,7 @@ class ProfileFragment : Fragment() {
         if (resultCode == AppCompatActivity.RESULT_OK) {
             if (requestCode == 1) {
                 val imageBitmap = data?.extras?.get("data") as Bitmap
-                binding.profileImage.setImageBitmap(imageBitmap)
+//                binding.profileImage.setImageBitmap(imageBitmap)
                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
                 val storage = Firebase.storage
                 val storageRef = storage.reference
@@ -136,7 +136,7 @@ class ProfileFragment : Fragment() {
                 uploadTask.addOnSuccessListener { taskSnapshot ->
                     val downloadUrl = taskSnapshot.storage.downloadUrl
                     downloadUrl.addOnSuccessListener { url ->
-
+                        binding.profileImage.setImageBitmap(imageBitmap)
                         Toast.makeText(requireActivity(), "Done", Toast.LENGTH_LONG).show()
                     }
                 }.addOnFailureListener { exception ->
@@ -144,7 +144,8 @@ class ProfileFragment : Fragment() {
                 }
             }
             if (requestCode == 100) {
-                binding.profileImage.setImageURI(data?.data)
+                val imageUri = data?.data
+//                binding.profileImage.setImageURI(data?.data)
                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
                 val storage = Firebase.storage
                 val storageRef = storage.reference
@@ -155,10 +156,11 @@ class ProfileFragment : Fragment() {
                 uploadTask.addOnSuccessListener { taskSnapshot ->
                     val downloadUrl = taskSnapshot.storage.downloadUrl
                     downloadUrl.addOnSuccessListener { url ->
+                        binding.profileImage.setImageURI(imageUri)
                         Toast.makeText(requireActivity(), "Done", Toast.LENGTH_LONG).show()
                     }
                 }.addOnFailureListener { exception ->
-                    Toast.makeText(requireActivity(), "Error", Toast.LENGTH_LONG).show()
+                    binding.profileImage.setImageResource(R.drawable.personal)
                 }
             }
         }
@@ -196,7 +198,7 @@ class ProfileFragment : Fragment() {
             val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
             binding.profileImage.setImageBitmap(bitmap)
         }.addOnFailureListener { exception ->
-            Toast.makeText(requireActivity(), exception.message, Toast.LENGTH_LONG).show()
+            binding.profileImage.setImageResource(R.drawable.personal)
         }
     }
 }
