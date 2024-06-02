@@ -124,7 +124,7 @@ class ProfileFragment : Fragment() {
         if (resultCode == AppCompatActivity.RESULT_OK) {
             if (requestCode == 1) {
                 val imageBitmap = data?.extras?.get("data") as Bitmap
-                binding.profileImage.setImageBitmap(imageBitmap)
+//                binding.profileImage.setImageBitmap(imageBitmap)
                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
                 val storage = Firebase.storage
                 val storageRef = storage.reference
@@ -145,7 +145,7 @@ class ProfileFragment : Fragment() {
             }
             if (requestCode == 100) {
                 val imageUri = data?.data
-                binding.profileImage.setImageURI(data?.data)
+//                binding.profileImage.setImageURI(data?.data)
                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
                 val storage = Firebase.storage
                 val storageRef = storage.reference
