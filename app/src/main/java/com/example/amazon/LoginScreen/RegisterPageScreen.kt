@@ -18,11 +18,6 @@ class RegisterPageScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterPageScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val shared = getSharedPreferences(
-            "MySharedPref",
-            AppCompatActivity.MODE_PRIVATE
-        )
-        shared.edit().remove("user").commit()
         firebaseAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         binding.cancel.setOnClickListener {
@@ -47,8 +42,8 @@ class RegisterPageScreen : AppCompatActivity() {
                                 "Email" to binding.emailRegister.text.toString(),
                                 "User Name" to binding.userRegister.text.toString(),
                                 "Phone" to binding.phoneRegister.text.toString()))
-
                             val intent = Intent(this, LoginPageScreen::class.java)
+                            intent.putExtra("index",1)
                             startActivity(intent)
                         } else {
                             Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()

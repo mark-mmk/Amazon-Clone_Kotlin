@@ -100,7 +100,6 @@ class ProfileFragment : Fragment() {
             }
             negativeButton.setOnClickListener {
                 Dialog.dismiss()
-//                Toast.makeText(requireActivity(), "Back", Toast.LENGTH_SHORT).show()
             }
             Dialog.show()
         }
@@ -137,7 +136,7 @@ class ProfileFragment : Fragment() {
                 uploadTask.addOnSuccessListener { taskSnapshot ->
                     val downloadUrl = taskSnapshot.storage.downloadUrl
                     downloadUrl.addOnSuccessListener { url ->
-
+                        binding.profileImage.setImageBitmap(imageBitmap)
                         Toast.makeText(requireActivity(), "Done", Toast.LENGTH_LONG).show()
                     }
                 }.addOnFailureListener { exception ->
@@ -145,6 +144,7 @@ class ProfileFragment : Fragment() {
                 }
             }
             if (requestCode == 100) {
+                val imageUri = data?.data
                 binding.profileImage.setImageURI(data?.data)
                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
                 val storage = Firebase.storage
@@ -156,10 +156,11 @@ class ProfileFragment : Fragment() {
                 uploadTask.addOnSuccessListener { taskSnapshot ->
                     val downloadUrl = taskSnapshot.storage.downloadUrl
                     downloadUrl.addOnSuccessListener { url ->
+                        binding.profileImage.setImageURI(imageUri)
                         Toast.makeText(requireActivity(), "Done", Toast.LENGTH_LONG).show()
                     }
                 }.addOnFailureListener { exception ->
-                    Toast.makeText(requireActivity(), "Error", Toast.LENGTH_LONG).show()
+                    binding.profileImage.setImageResource(R.drawable.personal)
                 }
             }
         }
@@ -197,8 +198,7 @@ class ProfileFragment : Fragment() {
             val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
             binding.profileImage.setImageBitmap(bitmap)
         }.addOnFailureListener { exception ->
-//            Toast.makeText(requireActivity(), "Error", Toast.LENGTH_LONG).show()
-        binding.profileImage.setImageResource(R.drawable.personal)
+            binding.profileImage.setImageResource(R.drawable.personal)
         }
     }
 }

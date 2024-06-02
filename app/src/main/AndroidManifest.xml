@@ -20,6 +20,10 @@
         android:theme="@style/Theme.Amazon"
         tools:targetApi="31">
         <activity
+            android:name=".SecondActivity"
+            android:parentActivityName=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginScreen.RegisterPageScreen"
             android:exported="false" />
         <activity

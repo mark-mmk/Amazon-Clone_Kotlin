@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 
 class LoginPageScreen : AppCompatActivity() {
-    lateinit var binding:ActivityLoginPageScreenBinding
+    lateinit var binding: ActivityLoginPageScreenBinding
     private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +37,8 @@ class LoginPageScreen : AppCompatActivity() {
 
             if (networkInfo != null && networkInfo.isConnected) {
                 // Internet connection is available
-                Toast.makeText(this@LoginPageScreen, "Network is Connected", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@LoginPageScreen, "Network is Connected", Toast.LENGTH_LONG)
+                    .show()
 
             } else {
                 // Internet connection is not available
@@ -55,11 +56,15 @@ class LoginPageScreen : AppCompatActivity() {
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                     } else {
-                        Toast.makeText(this, "Please Enter Success Email and Password", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Please Enter Success Email and Password",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             } else {
-                Toast.makeText( this, "Empty Fields Are not Allowed !!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Empty Fields Are not Allowed !!", Toast.LENGTH_SHORT).show()
 
             }
         }
@@ -76,7 +81,11 @@ class LoginPageScreen : AppCompatActivity() {
                     Toast.makeText(this, "Password reset email sent", Toast.LENGTH_SHORT).show()
 
                 } else {
-                    Toast.makeText(this, "Failed to send password reset email: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Failed to send password reset email: ${task.exception?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -88,6 +97,7 @@ class LoginPageScreen : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
     override fun onPause() {
         super.onPause()
         val sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE)
@@ -95,18 +105,25 @@ class LoginPageScreen : AppCompatActivity() {
         myEdit.putString("user", binding.emailLogin.text.toString())
         myEdit.apply()
     }
+
     override fun onResume() {
         super.onResume()
         val shared = getSharedPreferences("MySharedPref", MODE_PRIVATE)
         val Name = shared.getString("user", "")
         binding.emailLogin.setText(Name)
     }
+
     override fun onStart() {
         super.onStart()
-        val email = binding.emailLogin.text.toString()
-        if (firebaseAuth.currentUser != null && email != null) {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+        var index = intent.getIntExtra("index", 0)
+        if (index == 1) {
+            LoginPageScreen()
+        } else {
+            if (firebaseAuth.currentUser != null) {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 }
