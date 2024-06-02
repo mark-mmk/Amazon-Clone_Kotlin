@@ -1,6 +1,7 @@
 package com.example.amazon.HomeScreen
 
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.amazon.Adapter.CartAdapter
 import com.example.amazon.R
+import com.example.amazon.SecondActivity
 import com.example.amazon.dataBase.AppDataBase
 import com.example.amazon.dataBase.CartItem
 import com.example.amazon.databinding.FragmentBuyPageBinding
@@ -64,8 +66,11 @@ class BuyPage : Fragment() {
 
 
         binding.checkout.setOnClickListener {
-            val action = BuyPageDirections.actionBuyPageToPaymentPage(price = binding.BuyLastTotalPrice.text.toString())
-            findNavController().navigate(action)
+//            val action = BuyPageDirections.actionBuyPageToPaymentPage(price = binding.BuyLastTotalPrice.text.toString())
+//            findNavController().navigate(action)
+            val i = Intent(requireContext(), SecondActivity::class.java)
+            i.putExtra("lastTotalPrice",binding.BuyLastTotalPrice.text.toString())
+            startActivity(i)
         }
 
 
