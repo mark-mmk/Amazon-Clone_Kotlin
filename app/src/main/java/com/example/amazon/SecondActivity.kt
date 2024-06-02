@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.amazon.HomeScreen.AllProductsFragment
+import com.example.amazon.HomeScreen.PaymentPage
 import com.example.amazon.databinding.ActivitySecondBinding
 
 class SecondActivity : AppCompatActivity() {
@@ -29,6 +30,7 @@ class SecondActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         val categoryName = intent.getStringExtra("category_name")
+        val lastTotalPrice = intent.getStringExtra("lastTotalPrice")
         val productId = intent.getIntExtra("product_id", -1)
 
         if (productId != -1 && productId != null) {
@@ -50,6 +52,17 @@ class SecondActivity : AppCompatActivity() {
 
             supportFragmentManager.beginTransaction()
                 .replace(R.id.SecondLayoutFrameLayout, allProductsFragment)
+                .commit()
+        }else if (!lastTotalPrice.isNullOrEmpty()) {
+
+
+            val bundle = Bundle()
+            bundle.putString("lastTotalPrice", lastTotalPrice)
+            val paymentPage = PaymentPage()
+            paymentPage.arguments = bundle
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.SecondLayoutFrameLayout, paymentPage)
                 .commit()
         }
     }

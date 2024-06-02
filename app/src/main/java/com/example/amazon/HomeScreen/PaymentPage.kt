@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -69,7 +70,10 @@ class PaymentPage : Fragment() {
         }.addOnFailureListener {
             Log.w(ContentValues.TAG, "Error getting documents: ", it)
         }
-        val price =args.price
+//        val price =args.price
+        val price =arguments?.getString("lastTotalPrice")
+        (requireActivity() as AppCompatActivity).supportActionBar?.title = "Payment"
+
         binding.pricePayment.setText(price)
 
         binding.buy.setOnClickListener {
