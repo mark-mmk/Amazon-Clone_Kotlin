@@ -53,6 +53,10 @@ class LoginPageScreen : AppCompatActivity() {
             if (email.isNotEmpty() && pass.isNotEmpty()) {
                 firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
                     if (it.isSuccessful) {
+                        val sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE)
+                        val myEdit = sharedPreferences.edit()
+                        myEdit.putString("user", binding.emailLogin.text.toString())
+                        myEdit.apply()
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                     } else {
@@ -98,13 +102,13 @@ class LoginPageScreen : AppCompatActivity() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        val sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE)
-        val myEdit = sharedPreferences.edit()
-        myEdit.putString("user", binding.emailLogin.text.toString())
-        myEdit.apply()
-    }
+//    override fun onPause() {
+//        super.onPause()
+//        val sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE)
+//        val myEdit = sharedPreferences.edit()
+//        myEdit.putString("user", binding.emailLogin.text.toString())
+//        myEdit.apply()
+//    }
 
     override fun onResume() {
         super.onResume()
