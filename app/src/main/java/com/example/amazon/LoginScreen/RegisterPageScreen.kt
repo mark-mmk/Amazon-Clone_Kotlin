@@ -43,8 +43,9 @@ class RegisterPageScreen : AppCompatActivity() {
                                 "User Name" to binding.userRegister.text.toString(),
                                 "Phone" to binding.phoneRegister.text.toString()))
                             val intent = Intent(this, LoginPageScreen::class.java)
-                            intent.putExtra("index",1)
-                            startActivity(intent)
+//                            intent.putExtra("index",1)
+//                            startActivity(intent)
+                            finish()
                         } else {
                             Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
 

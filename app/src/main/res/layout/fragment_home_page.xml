@@ -59,6 +59,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/_2sdp"
                         android:text="Products"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -69,7 +70,8 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:padding="@dimen/_2sdp"
-                        android:text="@string/show_more" />
+                        android:text="@string/show_more"
+                        android:textColor="@color/black"/>
                 </RelativeLayout>
 
                 <include layout="@layout/product_layout" />

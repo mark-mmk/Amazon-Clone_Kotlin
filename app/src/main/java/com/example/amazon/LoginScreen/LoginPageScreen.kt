@@ -115,15 +115,24 @@ class LoginPageScreen : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        var index = intent.getIntExtra("index", 0)
-        if (index == 1) {
-            LoginPageScreen()
-        } else {
-            if (firebaseAuth.currentUser != null) {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
+        val shared = getSharedPreferences("MySharedPref", MODE_PRIVATE)
+        val email = shared.getString("user", "")
+        if (firebaseAuth.currentUser?.email == email) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
+
+
+//        var index = intent.getIntExtra("index", 0)
+//        if (index == 1) {
+//            LoginPageScreen()
+//        } else {
+//            if (firebaseAuth.currentUser != null) {
+//                val intent = Intent(this, MainActivity::class.java)
+//                startActivity(intent)
+//                finish()
+//            }
+//        }
     }
 }
