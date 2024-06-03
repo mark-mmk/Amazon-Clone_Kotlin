@@ -68,9 +68,14 @@ class BuyPage : Fragment() {
         binding.checkout.setOnClickListener {
 //            val action = BuyPageDirections.actionBuyPageToPaymentPage(price = binding.BuyLastTotalPrice.text.toString())
 //            findNavController().navigate(action)
-            val i = Intent(requireContext(), SecondActivity::class.java)
-            i.putExtra("lastTotalPrice",binding.BuyLastTotalPrice.text.toString())
-            startActivity(i)
+            if (subtotal>0){
+                val i = Intent(requireContext(), SecondActivity::class.java)
+                i.putExtra("lastTotalPrice",binding.BuyLastTotalPrice.text.toString())
+                startActivity(i)
+            }else{
+                Toast.makeText(requireContext(), "No Products In Cart", Toast.LENGTH_SHORT).show()
+            }
+
         }
 
 
