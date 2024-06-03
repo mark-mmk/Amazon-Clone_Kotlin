@@ -187,13 +187,13 @@ class ProfileFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
         val storage = Firebase.storage
         val storageRef = storage.reference
         val mountainsRef = storageRef.child("profile/$userId")
+
         mountainsRef.getBytes(Long.MAX_VALUE).addOnSuccessListener { bytes ->
             val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
             binding.profileImage.setImageBitmap(bitmap)
